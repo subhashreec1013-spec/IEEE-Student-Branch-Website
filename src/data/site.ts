@@ -2,8 +2,8 @@ export const SITE = {
   name: "IEEE Student Branch",
   institution: "SRM Institute of Science and Technology",
   email: "ieee.sb@srmist.edu.in",
-  phone: "+91 44 2741 7000",
-  address: "SRM Institute of Science and Technology, Kattankulathur, Chennai – 603203, Tamil Nadu, India",
+  phone: "1800 202 4565",
+  address: "SRM Institute of Science and Technology, SRM Nagar, Near Samayapuram, Tiruchirappalli - 621 105, Tamil Nadu, India",
 };
 
 export const NAV = [
@@ -306,7 +306,7 @@ export const MEMBERSHIP_BENEFITS = [
 ];
 
 export const SOCIALS = [
-  { label: "LinkedIn", icon: "Linkedin", href: "https://in.linkedin.com/company/srm-institute-of-science-and-technology-tiruchirappalli" },
+  { label: "LinkedIn", icon: "Linkedin", href: " https://www.linkedin.com/in/ieeesrmisttrichystudentchapter/ " },
   { label: "Instagram", icon: "Instagram", href: "https://www.instagram.com/" },
   { label: "Facebook", icon: "Facebook", href: "https://www.facebook.com/" },
   { label: "YouTube", icon: "Youtube", href: "https://www.youtube.com/" },
