@@ -12,7 +12,11 @@ import { SITE } from "@/data/site";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
+<<<<<<< HEAD
       { title: "IEEE Student Branch | SRM Institute of Science and Technology,Tiruchirapalli" },
+=======
+      { title: "IEEE Student Branch | SRM Institute of Science and Technology" },
+>>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
       {
         name: "description",
         content:

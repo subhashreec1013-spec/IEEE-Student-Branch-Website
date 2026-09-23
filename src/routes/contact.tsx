@@ -66,7 +66,11 @@ function ContactPage() {
             <div className="mt-6 overflow-hidden rounded-md border border-border">
               <iframe
                 title="Campus location map"
+<<<<<<< HEAD
                 src="https://www.google.com/maps?q=SRM+Institute+of+Science+and+Technology+Tiruchirappalli&output=embed"
+=======
+                src="https://www.google.com/maps?q=SRM+Institute+of+Science+and+Technology+Kattankulathur&output=embed"
+>>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
                 className="h-64 w-full border-0"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"

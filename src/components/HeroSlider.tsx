@@ -2,8 +2,13 @@ import { Link } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import hero1 from "@/assets/hero-1.jpg";
+<<<<<<< HEAD
 import heroHall from "@/assets/hero-hall.jpg";
 import heroInnovation from "@/assets/hero-innovation.jpg";
+=======
+import hero2 from "@/assets/hero-2.jpg";
+import hero3 from "@/assets/hero-3.jpg";
+>>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
 
 const SLIDES = [
   {
@@ -13,6 +18,7 @@ const SLIDES = [
     text: "Learn. Connect. Innovate.",
     cta: "Explore Events",
     to: "/events" as const,
+<<<<<<< HEAD
 
     // Adjust image position
     position: "center 35%",
@@ -20,22 +26,38 @@ const SLIDES = [
   {
     image: heroHall,
     alt: "Students and faculty gathered in the seminar hall at SRM IST for IEEE Student Branch event",
+=======
+  },
+  {
+    image: hero2,
+    alt: "Students attending a technical seminar in a university auditorium",
+>>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
     title: "IEEE Student Branch",
     text: "Building the next generation of innovators.",
     cta: "Join IEEE",
     to: "/membership" as const,
+<<<<<<< HEAD
 
     position: "center 50%",
   },
   {
     image: heroInnovation,
     alt: "Students coding on laptops in college lab during IEEE innovation session",
+=======
+  },
+  {
+    image: hero3,
+    alt: "Students coding at laptops during an overnight hackathon",
+>>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
     title: "Innovation Starts Here",
     text: "Discover workshops, events, projects and opportunities.",
     cta: "View Activities",
     to: "/activities" as const,
+<<<<<<< HEAD
 
     position: "center 45%",
+=======
+>>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
   },
 ];
 
@@ -50,11 +72,15 @@ export function HeroSlider() {
 
   useEffect(() => {
     if (paused) return;
+<<<<<<< HEAD
 
     timer.current = setInterval(() => {
       setIndex((i) => (i + 1) % SLIDES.length);
     }, 6000);
 
+=======
+    timer.current = setInterval(() => setIndex((i) => (i + 1) % SLIDES.length), 6000);
+>>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
     return () => {
       if (timer.current) clearInterval(timer.current);
     };
@@ -64,7 +90,11 @@ export function HeroSlider() {
     <section
       aria-label="Featured highlights"
       aria-roledescription="carousel"
+<<<<<<< HEAD
       className="relative h-[400px] w-full overflow-hidden bg-primary-deep sm:h-[450px] lg:h-[500px]"
+=======
+      className="relative h-[360px] w-full overflow-hidden bg-primary-deep sm:h-[420px] lg:h-[460px]"
+>>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
@@ -75,6 +105,7 @@ export function HeroSlider() {
           key={slide.title}
           aria-hidden={i !== index}
           className={`absolute inset-0 transition-opacity duration-700 ${
+<<<<<<< HEAD
             i === index
               ? "opacity-100"
               : "pointer-events-none opacity-0"
@@ -92,27 +123,53 @@ export function HeroSlider() {
           />
 
           {/* DARK BLUE OVERLAY */}
+=======
+            i === index ? "opacity-100" : "pointer-events-none opacity-0"
+          }`}
+        >
+          <img
+            src={slide.image}
+            alt={slide.alt}
+            width={1920}
+            height={900}
+            loading={i === 0 ? "eager" : "lazy"}
+            className="h-full w-full object-cover"
+          />
+>>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
           <div
             className="absolute inset-0"
             style={{
               background:
+<<<<<<< HEAD
                 "linear-gradient(90deg, rgba(0,49,83,0.88) 0%, rgba(0,49,83,0.65) 42%, rgba(0,49,83,0.25) 100%)",
             }}
             aria-hidden="true"
           />
 
           {/* CONTENT */}
+=======
+                "linear-gradient(90deg, oklch(0.35 0.09 240 / 0.92) 0%, oklch(0.35 0.09 240 / 0.72) 45%, oklch(0.35 0.09 240 / 0.35) 100%)",
+            }}
+            aria-hidden="true"
+          />
+>>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
           <div className="absolute inset-0">
             <div className="mx-auto flex h-full max-w-7xl flex-col justify-center px-6 sm:px-10 lg:px-8">
               <div className="max-w-xl">
                 <h2 className="text-3xl font-bold leading-tight text-primary-foreground drop-shadow-sm sm:text-4xl lg:text-5xl">
                   {slide.title}
                 </h2>
+<<<<<<< HEAD
 
                 <p className="mt-3 text-base font-semibold text-primary-foreground/90 sm:text-lg">
                   {slide.text}
                 </p>
 
+=======
+                <p className="mt-3 text-base font-semibold text-primary-foreground/90 sm:text-lg">
+                  {slide.text}
+                </p>
+>>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
                 <Link
                   to={slide.to}
                   tabIndex={i === index ? 0 : -1}
@@ -126,7 +183,10 @@ export function HeroSlider() {
         </div>
       ))}
 
+<<<<<<< HEAD
       {/* PREVIOUS */}
+=======
+>>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
       <button
         type="button"
         onClick={() => go(index - 1)}
@@ -135,8 +195,11 @@ export function HeroSlider() {
       >
         <ChevronLeft className="h-6 w-6" aria-hidden="true" />
       </button>
+<<<<<<< HEAD
 
       {/* NEXT */}
+=======
+>>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
       <button
         type="button"
         onClick={() => go(index + 1)}
@@ -146,7 +209,10 @@ export function HeroSlider() {
         <ChevronRight className="h-6 w-6" aria-hidden="true" />
       </button>
 
+<<<<<<< HEAD
       {/* DOTS */}
+=======
+>>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
       <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-3">
         {SLIDES.map((slide, i) => (
           <button
@@ -156,13 +222,21 @@ export function HeroSlider() {
             aria-label={`Go to slide ${i + 1}: ${slide.title}`}
             aria-current={i === index}
             className={`h-3 w-3 rounded-full border border-primary-foreground/80 transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-background ${
+<<<<<<< HEAD
               i === index
                 ? "w-8 bg-accent"
                 : "bg-primary-foreground/40 hover:bg-primary-foreground/70"
+=======
+              i === index ? "w-8 bg-accent" : "bg-primary-foreground/40 hover:bg-primary-foreground/70"
+>>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
             }`}
           />
         ))}
       </div>
     </section>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0

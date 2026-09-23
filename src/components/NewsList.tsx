@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+<<<<<<< HEAD
 import news1 from "@/assets/news-1.jpg";
 import news2 from "@/assets/news-2.jpg";
 import news3 from "@/assets/news-3.jpg";
@@ -9,6 +10,18 @@ const IMAGES = [news1, news2, news3];
 export function NewsList({ limit }: { limit?: number }) {
   const items: NewsItem[] = limit ? NEWS.slice(0, limit) : NEWS;
 
+=======
+import about from "@/assets/about.jpg";
+import hero1 from "@/assets/hero-1.jpg";
+import hero2 from "@/assets/hero-2.jpg";
+import hero3 from "@/assets/hero-3.jpg";
+import { NEWS, type NewsItem } from "@/data/site";
+
+const IMAGES = [hero2, about, hero3, hero1];
+
+export function NewsList({ limit }: { limit?: number }) {
+  const items: NewsItem[] = limit ? NEWS.slice(0, limit) : NEWS;
+>>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
   return (
     <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {items.map((item, i) => (
@@ -24,11 +37,15 @@ export function NewsList({ limit }: { limit?: number }) {
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
           </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
           <div className="flex flex-1 flex-col p-5">
             <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
               <span className="text-accent">{item.category}</span> · {item.date}
             </p>
+<<<<<<< HEAD
 
             <h3 className="mt-2 text-base font-bold leading-snug text-primary">
               {item.title}
@@ -38,6 +55,12 @@ export function NewsList({ limit }: { limit?: number }) {
               {item.description}
             </p>
 
+=======
+            <h3 className="mt-2 text-base font-bold leading-snug text-primary">{item.title}</h3>
+            <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
+              {item.description}
+            </p>
+>>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
             <a
               href="#article"
               className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-accent underline-offset-4 hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
@@ -50,4 +73,8 @@ export function NewsList({ limit }: { limit?: number }) {
       ))}
     </div>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
