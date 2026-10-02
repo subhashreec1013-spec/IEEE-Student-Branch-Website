@@ -1,0 +1,36 @@
+# IEEE Student Branch Website - Requirements
+
+## Runtime
+- Node.js >= 20.0.0 (recommended: latest LTS)
+- npm >= 10.0.0 OR Bun >= 1.0.0
+
+## Package Manager
+This project uses dependencies defined in `package.json`.
+Install them with one of the following commands:
+
+```bash
+npm install
+# OR
+bun install
+```
+
+## Development Server
+```bash
+npm run dev
+# OR
+bun run dev
+```
+
+## Build
+```bash
+npm run build
+# OR
+bun run build
+```
+
+## Key Stack
+- React 19
+- TanStack Router / TanStack Start
+- Tailwind CSS v4
+- Vite 8
+- TypeScript 5
