@@ -1,7 +1,7 @@
 export const SITE = {
   name: "IEEE Student Branch",
   institution: "SRM Institute of Science and Technology,Tiruchirapalli",
-  email: "ieee.sb@srmist.edu.in",
+  email: "ieeestudentchapter@ist.srmtrichy.edu.in",
   phone: "1800 202 4565",
   address:
     "SRM Institute of Science and Technology, SRM Nagar, Near Samayapuram, Tiruchirappalli - 621 105, Tamil Nadu, India",
@@ -17,7 +17,7 @@ export const NAV = [
   { label: "Resources", to: "/resources" as const },
   { label: "News", to: "/news" as const },
   { label: "Contact", to: "/contact" as const },
-  { label: "Complaints & Queries", to: "/complaints-queries" as const },
+  { label: "Submit a Query", to: "/complaints-queries" as const },
 ];
 
 export type Featured = {
