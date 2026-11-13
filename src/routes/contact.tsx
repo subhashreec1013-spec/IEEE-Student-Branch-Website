@@ -16,12 +16,8 @@ export const Route = createFileRoute("/contact")({
       { property: "og:title", content: "Contact the IEEE Student Branch" },
       {
         property: "og:description",
-<<<<<<< HEAD
         content:
           "Reach the IEEE Student Branch committee at SRM IST by email, phone or the enquiry form.",
-=======
-        content: "Reach the IEEE Student Branch committee at SRM IST by email, phone or the enquiry form.",
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
       },
       { property: "og:url", content: "/contact" },
     ],
@@ -40,28 +36,20 @@ function ContactPage() {
       <Section>
         <div className="grid gap-10 lg:grid-cols-2">
           <div>
-<<<<<<< HEAD
             <SectionHeading
               eyebrow="Get in touch"
               title={SITE.name}
               description={SITE.institution}
             />
-=======
-            <SectionHeading eyebrow="Get in touch" title={SITE.name} description={SITE.institution} />
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
             <ul className="mt-8 space-y-4">
               <li className="flex gap-4 rounded-md border border-border bg-surface p-5">
                 <Mail className="mt-0.5 h-5 w-5 shrink-0 text-accent" aria-hidden="true" />
                 <div>
                   <p className="text-sm font-bold text-primary">Email</p>
-<<<<<<< HEAD
                   <a
                     href={`mailto:${SITE.email}`}
                     className="text-sm text-muted-foreground hover:underline"
                   >
-=======
-                  <a href={`mailto:${SITE.email}`} className="text-sm text-muted-foreground hover:underline">
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
                     {SITE.email}
                   </a>
                 </div>
@@ -70,14 +58,10 @@ function ContactPage() {
                 <Phone className="mt-0.5 h-5 w-5 shrink-0 text-accent" aria-hidden="true" />
                 <div>
                   <p className="text-sm font-bold text-primary">Phone</p>
-<<<<<<< HEAD
                   <a
                     href={`tel:${SITE.phone.replace(/\s/g, "")}`}
                     className="text-sm text-muted-foreground hover:underline"
                   >
-=======
-                  <a href={`tel:${SITE.phone.replace(/\s/g, "")}`} className="text-sm text-muted-foreground hover:underline">
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
                     {SITE.phone}
                   </a>
                 </div>
@@ -93,15 +77,7 @@ function ContactPage() {
             <div className="mt-6 overflow-hidden rounded-md border border-border">
               <iframe
                 title="Campus location map"
-<<<<<<< HEAD
                 src="https://www.google.com/maps?q=SRM+Institute+of+Science+and+Technology+Tiruchirappalli&output=embed"
-=======
-<<<<<<< HEAD
-                src="https://www.google.com/maps?q=SRM+Institute+of+Science+and+Technology+Tiruchirappalli&output=embed"
-=======
-                src="https://www.google.com/maps?q=SRM+Institute+of+Science+and+Technology+Kattankulathur&output=embed"
->>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
                 className="h-64 w-full border-0"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"

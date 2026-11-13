@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { useState } from "react";
 import { CalendarDays, Clock, MapPin, ZoomIn, Download, ArrowRight } from "lucide-react";
 import {
@@ -8,22 +7,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-=======
-import { CalendarDays, Clock, MapPin } from "lucide-react";
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
 import about from "@/assets/about.jpg";
 import hero1 from "@/assets/hero-1.jpg";
 import hero2 from "@/assets/hero-2.jpg";
 import hero3 from "@/assets/hero-3.jpg";
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
 import events1 from "@/assets/events-1.jpg";
 import events2 from "@/assets/events-2.jpg";
 import yuvaMegathon from "@/assets/yuva-megathon.png";
 import epicsWheelchair from "@/assets/epics-wheelchair.png";
-<<<<<<< HEAD
 import engineerToAdmin from "@/assets/event-engineer-to-admin.jpg";
 import researchRoute from "@/assets/event-research-route.jpg";
 import inaugurationPoster from "@/assets/inauguration-poster.jpg";
@@ -33,11 +24,6 @@ const CATEGORY_IMAGES: Record<string, string> = {
   "Upcoming Event": inaugurationPoster,
   "Public service": engineerToAdmin,
   "IEEE Research Route": researchRoute,
-=======
-import { EVENTS, type EventItem } from "@/data/site";
-
-const CATEGORY_IMAGES: Record<string, string> = {
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
   Hackathon: yuvaMegathon,
   "IEEE EPICS": epicsWheelchair,
 };
@@ -45,7 +31,6 @@ const CATEGORY_IMAGES: Record<string, string> = {
 const IMAGES = [hero1, hero2, hero3, yuvaMegathon, about];
 
 export function EventsList({ limit }: { limit?: number }) {
-<<<<<<< HEAD
   const [selectedEvent, setSelectedEvent] = useState<{
     event: EventItem;
     imageSrc: string;
@@ -61,37 +46,15 @@ export function EventsList({ limit }: { limit?: number }) {
     >
       {items.map((event, i) => {
         // Use category-specific poster images first, then fall back to numbered/generic images
-        const imageSrc =
+        const fallbackImage = IMAGES[i % IMAGES.length] ?? hero1;
+        const imageSrc: string =
           CATEGORY_IMAGES[event.category] ??
           event.image ??
-          (i === 2 ? events1 : i === 3 ? events2 : IMAGES[i % IMAGES.length]);
-=======
-  const items: EventItem[] = limit ? EVENTS.slice(0, limit) : EVENTS;
-
-  return (
-    <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {items.map((event, i) => {
-        // First two cards use your new images
-        const imageSrc =
-          i === 0
-            ? events1
-            : i === 1
-              ? events2
-              : event.image ??
-                CATEGORY_IMAGES[event.category] ??
-                IMAGES[i % IMAGES.length];
-
-        const isHackathon =
-          event.category.toLowerCase() === "hackathon";
-
-        const isHero2 = imageSrc === hero2;
-        const isEpics = imageSrc === epicsWheelchair;
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
+          (i === 2 ? events1 : i === 3 ? events2 : fallbackImage);
 
         return (
           <article
             key={event.title}
-<<<<<<< HEAD
             className="group flex flex-col h-full overflow-hidden rounded-lg border border-border bg-card shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-card-hover)]"
           >
             {/* Clickable Event Poster / Image */}
@@ -103,17 +66,10 @@ export function EventsList({ limit }: { limit?: number }) {
               className="relative h-64 sm:h-72 w-full overflow-hidden bg-slate-100/90 dark:bg-slate-900/50 p-3 flex items-center justify-center cursor-pointer group/poster border-b border-border"
               title="Click to view full clear poster & details"
             >
-=======
-            className="group flex flex-col overflow-hidden rounded-md border border-border bg-card shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-card-hover)]"
-          >
-            {/* Event Image */}
-            <div className="relative aspect-[16/9] overflow-hidden bg-white">
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
               <img
                 src={imageSrc}
                 alt={event.title}
                 loading="lazy"
-<<<<<<< HEAD
                 className="h-full w-full object-contain drop-shadow-xs transition-transform duration-500 group-hover/poster:scale-105"
               />
 
@@ -161,100 +117,51 @@ export function EventsList({ limit }: { limit?: number }) {
                 </p>
               </div>
 
-              {/* Action bar like News page */}
-              <div className="mt-4 pt-3 border-t border-border flex items-center justify-between">
-                <button
-                  type="button"
-                  onClick={() => setSelectedEvent({ event, imageSrc })}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-accent underline-offset-4 hover:text-primary hover:underline cursor-pointer focus-visible:outline-2 focus-visible:outline-ring"
-                >
-                  View Details & Poster
-                  <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-                </button>
-
-                {event.pdfUrl && (
-                  <a
-                    href={event.pdfUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs font-semibold text-muted-foreground hover:text-accent flex items-center gap-1"
-                    title="Download Original PDF"
+              {/* Action bar */}
+              <div className="mt-4 pt-3 border-t border-border flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedEvent({ event, imageSrc })}
+                    className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-accent underline-offset-4 hover:text-primary hover:underline cursor-pointer focus-visible:outline-2 focus-visible:outline-ring"
                   >
-                    <Download className="h-3.5 w-3.5" />
-                    PDF
+                    View Details & Poster
+                    <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                  </button>
+
+                  {event.pdfUrl && (
+                    <a
+                      href={event.pdfUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs font-semibold text-muted-foreground hover:text-accent flex items-center gap-1"
+                      title="Download Original PDF"
+                    >
+                      <Download className="h-3.5 w-3.5" />
+                      PDF
+                    </a>
+                  )}
+                </div>
+
+                {event.registerUrl && (
+                  <a
+                    href={event.registerUrl}
+                    {...(event.registerUrl.startsWith("http")
+                      ? {
+                          target: "_blank",
+                          rel: "noopener noreferrer",
+                        }
+                      : {})}
+                    className="mt-2 inline-flex h-10 items-center justify-center rounded-sm bg-primary px-4 text-xs font-bold uppercase tracking-widest text-primary-foreground transition-colors hover:bg-primary-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                  >
+                    Register Now
                   </a>
                 )}
               </div>
-=======
-                className={`h-full w-full ${
-                  isHero2 || isEpics
-                    ? "object-contain bg-white"
-                    : isHackathon
-                      ? "object-cover object-top"
-                      : "object-cover"
-                } transition-transform duration-500 group-hover:scale-105`}
-              />
-
-              {/* Category Badge */}
-              <span className="absolute left-0 top-4 bg-accent px-3 py-1 text-[0.65rem] font-bold uppercase tracking-widest text-accent-foreground">
-                {event.category}
-              </span>
-            </div>
-
-            {/* Event Content */}
-            <div className="flex flex-1 flex-col p-5">
-              <h3 className="text-base font-bold leading-snug text-primary">
-                {event.title}
-              </h3>
-
-              <ul className="mt-3 space-y-1.5 text-sm text-muted-foreground">
-                <li className="flex items-center gap-2">
-                  <CalendarDays
-                    className="h-4 w-4 shrink-0 text-accent"
-                    aria-hidden="true"
-                  />
-                  {event.date}
-                </li>
-
-                <li className="flex items-center gap-2">
-                  <Clock
-                    className="h-4 w-4 shrink-0 text-accent"
-                    aria-hidden="true"
-                  />
-                  {event.time}
-                </li>
-
-                <li className="flex items-start gap-2">
-                  <MapPin
-                    className="mt-0.5 h-4 w-4 shrink-0 text-accent"
-                    aria-hidden="true"
-                  />
-                  {event.location}
-                </li>
-              </ul>
-
-              <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">
-                {event.description}
-              </p>
-
-              <a
-                href={event.registerUrl ?? "#register"}
-                {...(event.registerUrl?.startsWith("http")
-                  ? {
-                      target: "_blank",
-                      rel: "noopener noreferrer",
-                    }
-                  : {})}
-                className="mt-5 inline-flex h-11 items-center justify-center rounded-sm bg-primary px-5 text-xs font-bold uppercase tracking-widest text-primary-foreground transition-colors hover:bg-primary-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-              >
-                Register Now
-              </a>
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
             </div>
           </article>
         );
       })}
-<<<<<<< HEAD
 
       {/* FULL POSTER & DETAILS LIGHTBOX MODAL */}
       <Dialog open={!!selectedEvent} onOpenChange={(open) => !open && setSelectedEvent(null)}>
@@ -379,6 +286,22 @@ export function EventsList({ limit }: { limit?: number }) {
                       "{selectedEvent.event.note}"
                     </div>
                   )}
+
+                  {/* Register button if available */}
+                  {selectedEvent.event.registerUrl && (
+                    <a
+                      href={selectedEvent.event.registerUrl}
+                      {...(selectedEvent.event.registerUrl.startsWith("http")
+                        ? {
+                            target: "_blank",
+                            rel: "noopener noreferrer",
+                          }
+                        : {})}
+                      className="mt-3 inline-flex h-11 w-full items-center justify-center rounded-sm bg-primary px-5 text-xs font-bold uppercase tracking-widest text-primary-foreground transition-colors hover:bg-primary-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                    >
+                      Register Now
+                    </a>
+                  )}
                 </div>
               </div>
             </div>
@@ -388,65 +311,3 @@ export function EventsList({ limit }: { limit?: number }) {
     </div>
   );
 }
-=======
-    </div>
-  );
-}
-=======
-import { EVENTS, type EventItem } from "@/data/site";
-
-const IMAGES = [hero1, hero2, hero3, about];
-
-export function EventsList({ limit }: { limit?: number }) {
-  const items: EventItem[] = limit ? EVENTS.slice(0, limit) : EVENTS;
-  return (
-    <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {items.map((event, i) => (
-        <article
-          key={event.title}
-          className="group flex flex-col overflow-hidden rounded-md border border-border bg-card shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-card-hover)]"
-        >
-          <div className="relative aspect-[16/9] overflow-hidden">
-            <img
-              src={IMAGES[i % IMAGES.length]}
-              alt={event.title}
-              loading="lazy"
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-            <span className="absolute left-0 top-4 bg-accent px-3 py-1 text-[0.65rem] font-bold uppercase tracking-widest text-accent-foreground">
-              {event.category}
-            </span>
-          </div>
-          <div className="flex flex-1 flex-col p-5">
-            <h3 className="text-base font-bold leading-snug text-primary">{event.title}</h3>
-            <ul className="mt-3 space-y-1.5 text-sm text-muted-foreground">
-              <li className="flex items-center gap-2">
-                <CalendarDays className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
-                {event.date}
-              </li>
-              <li className="flex items-center gap-2">
-                <Clock className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
-                {event.time}
-              </li>
-              <li className="flex items-start gap-2">
-                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
-                {event.location}
-              </li>
-            </ul>
-            <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">
-              {event.description}
-            </p>
-            <a
-              href="#register"
-              className="mt-5 inline-flex h-11 items-center justify-center rounded-sm bg-primary px-5 text-xs font-bold uppercase tracking-widest text-primary-foreground transition-colors hover:bg-primary-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-            >
-              Register Now
-            </a>
-          </div>
-        </article>
-      ))}
-    </div>
-  );
-}
->>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73

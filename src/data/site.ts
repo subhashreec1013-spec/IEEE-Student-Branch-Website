@@ -1,25 +1,10 @@
 export const SITE = {
   name: "IEEE Student Branch",
-<<<<<<< HEAD
-  institution: "SRM Institute of Science and Technology,Tiruchirapalli",
+  institution: "SRM Institute of Science and Technology, Tiruchirappalli",
   email: "ieeestudentchapter@ist.srmtrichy.edu.in",
   phone: "1800 202 4565",
   address:
     "SRM Institute of Science and Technology, SRM Nagar, Near Samayapuram, Tiruchirappalli - 621 105, Tamil Nadu, India",
-=======
-<<<<<<< HEAD
-  institution: "SRM Institute of Science and Technology,Tiruchirapalli",
-  email: "ieee.sb@srmist.edu.in",
-  phone: "1800 202 4565",
-  address:
-    "SRM Institute of Science and Technology, SRM Nagar, Near Samayapuram, Tiruchirappalli - 621 105, Tamil Nadu, India",
-=======
-  institution: "SRM Institute of Science and Technology",
-  email: "ieee.sb@srmist.edu.in",
-  phone: "+91 44 2741 7000",
-  address: "SRM Institute of Science and Technology, Kattankulathur, Chennai – 603203, Tamil Nadu, India",
->>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
 };
 
 export const NAV = [
@@ -32,10 +17,8 @@ export const NAV = [
   { label: "Resources", to: "/resources" as const },
   { label: "News", to: "/news" as const },
   { label: "Contact", to: "/contact" as const },
-<<<<<<< HEAD
+  { label: "Propose an Event", to: "/event-proposal" as const },
   { label: "Submit a Query", to: "/complaints-queries" as const },
-=======
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
 ];
 
 export type Featured = {
@@ -64,23 +47,10 @@ export const FEATURED: Featured[] = [
     to: "/activities",
   },
   {
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
     category: "IEEE EPICS",
     title: "Improving Mobility and Inclusivity",
     description:
       "SRM Institute of Science and Technology students develop a versatile and affordable electric wheelchair.",
-<<<<<<< HEAD
-=======
-=======
-    category: "Learning",
-    title: "Workshops & Technical Sessions",
-    description:
-      "Hands-on sessions on embedded systems, AI, signal processing, PCB design and research writing.",
->>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
     cta: "Learn More",
     to: "/activities",
   },
@@ -101,25 +71,16 @@ export type EventItem = {
   location: string;
   description: string;
   category: string;
-<<<<<<< HEAD
   image?: string;
   registerUrl?: string;
   pdfUrl?: string;
   inauguratedBy?: string;
   presidedBy?: string[];
   note?: string;
-=======
-<<<<<<< HEAD
-  image?: string;
-  registerUrl?: string;
-=======
->>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
 };
 
 export const EVENTS: EventItem[] = [
   {
-<<<<<<< HEAD
     title: "Inauguration Ceremony of the IEEE Student Branch",
     date: "14 November 2026",
     time: "10:30 AM IST",
@@ -137,23 +98,15 @@ export const EVENTS: EventItem[] = [
       "Dr. R. Balasundaram — Dean of FET, SRM Institute of Science and Technology",
     ],
     note: "Join us as we embark on a journey of innovation, collaboration, and excellence in technology.",
-=======
+  },
+  {
     title: "IEEE Technical Workshop: Embedded Systems with ARM Cortex-M",
-<<<<<<< HEAD
     date: "19 September 2026 (Saturday)",
     time: "8:30 PM – 10:00 PM",
     location: "Online",
     category: "Workshop",
     description:
       "A hands-on workshop covering CTF basics, Linux fundamentals, live demonstrations and interactive problem solving.",
-=======
-    date: "15 September 2026",
-    time: "10:00 AM – 4:00 PM",
-    location: "Tech Park Seminar Hall, SRM IST",
-    category: "Workshop",
-    description:
-      "A full-day hands-on workshop covering bare-metal firmware, peripheral drivers and real-time debugging on ARM Cortex-M boards.",
->>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
   },
   {
     title: "IEEE Day Celebration & Project Exhibition",
@@ -165,7 +118,6 @@ export const EVENTS: EventItem[] = [
       "Student teams demonstrate year-long projects, followed by an IEEE Day address from senior section volunteers.",
   },
   {
-<<<<<<< HEAD
     title: "YUVA MEGATHON – 36-Hour National Hackathon",
     date: "28 – 30 September 2026 (Monday – Wednesday)",
     time: "36 Hours (Overnight)",
@@ -174,15 +126,6 @@ export const EVENTS: EventItem[] = [
     description:
       "National level 36-hour hackathon featuring the IEEE Student Branch Hardware Track, ₹25,000 cash prizes, internship opportunities and hardware kits.",
     registerUrl: "https://unstop.com/o/epOAXwk",
-=======
-    title: "Hack the Grid – 24 Hour Hackathon",
-    date: "24 October 2026",
-    time: "9:00 AM (24 hours)",
-    location: "Innovation Lab, Biotech Block, SRM IST",
-    category: "Hackathon",
-    description:
-      "Build smart-grid and energy-efficiency solutions overnight, mentored by IEEE PES volunteers and industry engineers.",
->>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
   },
   {
     title: "Guest Lecture: Careers in Semiconductor Design",
@@ -203,7 +146,6 @@ export const EVENTS: EventItem[] = [
       "Learn IEEE paper formatting, literature review technique and conference submission strategy with faculty mentors.",
   },
   {
-<<<<<<< HEAD
     title: "EPICS in IEEE: Improving Mobility and Inclusivity",
     date: "10 December 2026",
     time: "10:00 AM – 4:30 PM",
@@ -211,7 +153,8 @@ export const EVENTS: EventItem[] = [
     category: "IEEE EPICS",
     description:
       "SRM Institute of Science and Technology students develop a versatile and affordable electric wheelchair prototype under EPICS in IEEE.",
-=======
+  },
+  {
     title: "Women in Engineering Leadership Summit",
     date: "10 December 2026",
     time: "10:00 AM – 4:30 PM",
@@ -219,8 +162,6 @@ export const EVENTS: EventItem[] = [
     category: "IEEE WIE",
     description:
       "Panels, mentoring circles and workshops celebrating women engineers across academia and industry.",
->>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
   },
 ];
 
@@ -230,7 +171,6 @@ export type TeamMember = {
   department: string;
   email: string;
   linkedin: string;
-<<<<<<< HEAD
   isVacant?: boolean;
 };
 
@@ -285,68 +225,18 @@ export const FUNCTIONAL_LEADS: TeamMember[] = [
   {
     name: "Ch Shanmukha Venkata Lakshman",
     position: "Technical Lead",
-=======
-};
-
-export const TEAM: TeamMember[] = [
-  {
-    name: "Aravind Krishnan",
-    position: "Student Branch Chair",
-    department: "Electronics & Communication Engineering",
-    email: "chair.ieee@srmist.edu.in",
-    linkedin: "https://www.linkedin.com/",
-  },
-  {
-    name: "Meera Sundaram",
-    position: "Vice Chair",
-    department: "Electrical & Electronics Engineering",
-    email: "vicechair.ieee@srmist.edu.in",
-    linkedin: "https://www.linkedin.com/",
-  },
-  {
-    name: "Rohit Verma",
-    position: "Secretary",
-    department: "Computer Science & Engineering",
-    email: "secretary.ieee@srmist.edu.in",
-    linkedin: "https://www.linkedin.com/",
-  },
-  {
-    name: "Nandhini Raghavan",
-    position: "Treasurer",
-    department: "Information Technology",
-    email: "treasurer.ieee@srmist.edu.in",
-    linkedin: "https://www.linkedin.com/",
-  },
-  {
-    name: "Karthik Balaji",
-    position: "Webmaster",
-    department: "Computer Science & Engineering",
-    email: "web.ieee@srmist.edu.in",
-    linkedin: "https://www.linkedin.com/",
-  },
-  {
-    name: "Sneha Iyer",
-    position: "Technical Head",
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
     department: "Mechatronics Engineering",
     email: "technical.ieee@srmist.edu.in",
     linkedin: "https://www.linkedin.com/",
   },
   {
-<<<<<<< HEAD
     name: "Gowtham A",
     position: "Event Organiser",
     department: "Computer Science & Engineering with a specialization in Artificial Intelligence and Machine Learning",
-=======
-    name: "Vikram Desai",
-    position: "Event Coordinator",
-    department: "Electronics & Instrumentation",
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
     email: "events.ieee@srmist.edu.in",
     linkedin: "https://www.linkedin.com/",
   },
   {
-<<<<<<< HEAD
     name: "K R Vaishak",
     position: "Research and Innovation Lead",
     department: "Computer Science & Engineering with a specialization in Artificial Intelligence and Machine Learning",
@@ -372,17 +262,17 @@ export const TEAM: TeamMember[] = [
     position: "Operations Lead",
     department: "Mechanical Engineering",
     email: "internal.ieee@srmist.edu.in",
-=======
+    linkedin: "https://www.linkedin.com/",
+  },
+  {
     name: "Dr. Lakshmi Narayanan",
     position: "Branch Counsellor",
     department: "Faculty, Dept. of ECE",
     email: "counsellor.ieee@srmist.edu.in",
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
     linkedin: "https://www.linkedin.com/",
   },
 ];
 
-<<<<<<< HEAD
 export const TEAM: TeamMember[] = [
   ...EXECUTIVE_MEMBERS,
   ...FUNCTIONAL_LEADS.filter((m) => !m.isVacant),
@@ -440,24 +330,17 @@ export type NewsDetail = {
 
 export type NewsItem = {
   id?: string;
-=======
-export type NewsItem = {
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
   title: string;
   date: string;
   category: string;
   description: string;
-<<<<<<< HEAD
   isFeatured?: boolean;
   tagline?: string;
   details?: NewsDetail;
-=======
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
 };
 
 export const NEWS: NewsItem[] = [
   {
-<<<<<<< HEAD
     id: "innovate-x",
     title: "INNOVATE X — Build. Showcase. Inspire.",
     date: "15 October 2026",
@@ -629,7 +512,13 @@ export const NEWS: NewsItem[] = [
   },
   {
     id: "award",
-=======
+    title: "Branch Recognised as Outstanding Student Branch by Madras Section",
+    date: "30 June 2026",
+    category: "Award",
+    description:
+      "The recognition acknowledges sustained membership growth, technical activity volume and community outreach across the year.",
+  },
+  {
     title: "IEEE Student Branch Successfully Conducts Technical Workshop",
     date: "22 August 2026",
     category: "Workshop",
@@ -651,16 +540,6 @@ export const NEWS: NewsItem[] = [
       "Teams of up to four can register for the Innovation Challenge, with prototypes shortlisted for the Madras Section showcase.",
   },
   {
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
-    title: "Branch Recognised as Outstanding Student Branch by Madras Section",
-    date: "30 June 2026",
-    category: "Award",
-    description:
-      "The recognition acknowledges sustained membership growth, technical activity volume and community outreach across the year.",
-  },
-<<<<<<< HEAD
-=======
-  {
     title: "Signal Processing Society Chapter Inaugurated",
     date: "12 June 2026",
     category: "Chapter",
@@ -674,7 +553,6 @@ export const NEWS: NewsItem[] = [
     description:
       "A third-year student team had its paper on low-power sensor networks accepted for oral presentation.",
   },
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
 ];
 
 export type Activity = {
@@ -684,10 +562,6 @@ export type Activity = {
 };
 
 export const ACTIVITIES: Activity[] = [
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
   {
     title: "Technical Workshops",
     icon: "Wrench",
@@ -738,30 +612,11 @@ export const ACTIVITIES: Activity[] = [
     icon: "Rocket",
     description: "Idea labs, design thinking sprints and patent awareness sessions.",
   },
-<<<<<<< HEAD
-=======
-=======
-  { title: "Technical Workshops", icon: "Wrench", description: "Hands-on sessions on hardware, firmware and modern software tooling." },
-  { title: "Hackathons", icon: "Code2", description: "Overnight build sprints solving real engineering and social problems." },
-  { title: "Coding Competitions", icon: "Terminal", description: "Algorithmic contests and interview-style challenges every semester." },
-  { title: "Seminars", icon: "Presentation", description: "Focused technical seminars led by faculty and senior volunteers." },
-  { title: "Guest Lectures", icon: "Mic", description: "Practitioners from industry and research share applied experience." },
-  { title: "Webinars", icon: "Video", description: "Online sessions connecting members with global IEEE speakers." },
-  { title: "Project Exhibitions", icon: "Lightbulb", description: "Annual showcase of student prototypes, judged and documented." },
-  { title: "Career Development", icon: "GraduationCap", description: "Resume clinics, mock interviews and internship guidance." },
-  { title: "Community Service", icon: "HeartHandshake", description: "STEM outreach in local schools and technology-for-good drives." },
-  { title: "Innovation Activities", icon: "Rocket", description: "Idea labs, design thinking sprints and patent awareness sessions." },
->>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
 ];
 
 export const RESOURCES = [
   {
     title: "CSS Libraries",
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
     description:
       "Resources and styling tools used to maintain a consistent visual experience across every branch page.",
   },
@@ -779,24 +634,6 @@ export const RESOURCES = [
     title: "Header",
     description:
       "Information about the website header, branch identity and the primary navigation bar.",
-<<<<<<< HEAD
-=======
-=======
-    description: "Resources and styling tools used to maintain a consistent visual experience across every branch page.",
-  },
-  {
-    title: "JavaScript Libraries",
-    description: "Interactive components and functionality used across the website, from the slider to the contact form.",
-  },
-  {
-    title: "Customization",
-    description: "Information about customizing the IEEE Student Branch website content, sections and branding.",
-  },
-  {
-    title: "Header",
-    description: "Information about the website header, branch identity and the primary navigation bar.",
->>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
   },
   {
     title: "Menus",
@@ -808,17 +645,8 @@ export const RESOURCES = [
   },
   {
     title: "Custom Functions",
-<<<<<<< HEAD
     description:
       "Additional website functionality and integrations maintained by the webmaster team.",
-=======
-<<<<<<< HEAD
-    description:
-      "Additional website functionality and integrations maintained by the webmaster team.",
-=======
-    description: "Additional website functionality and integrations maintained by the webmaster team.",
->>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
   },
 ];
 
@@ -832,32 +660,14 @@ export const MEMBERSHIP_BENEFITS = [
 ];
 
 export const SOCIALS = [
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
   {
     label: "LinkedIn",
     icon: "Linkedin",
-    href: " https://www.linkedin.com/company/ieeesrmisttrichystudentbranch/",
+    href: "https://www.linkedin.com/company/ieeesrmisttrichystudentbranch/",
   },
-<<<<<<< HEAD
   {
     label: "Instagram",
     icon: "Instagram",
     href: "https://www.instagram.com/ieee_sb_srmist_try?stkn=YTJ2MXlnNXJ2amZx",
   },
-=======
-  { label: "Instagram", icon: "Instagram", href: "https://www.instagram.com/ieee_sb_srmist_try?stkn=YTJ2MXlnNXJ2amZx" },
-  
-  
-  
-=======
-  { label: "LinkedIn", icon: "Linkedin", href: "https://in.linkedin.com/company/srm-institute-of-science-and-technology-tiruchirappalli" },
-  { label: "Instagram", icon: "Instagram", href: "https://www.instagram.com/" },
-  { label: "Facebook", icon: "Facebook", href: "https://www.facebook.com/" },
-  { label: "YouTube", icon: "Youtube", href: "https://www.youtube.com/" },
-  { label: "X (Twitter)", icon: "Twitter", href: "https://twitter.com/" },
->>>>>>> d0e86d16073d4b073e44be200fab16a1968417f0
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
 ];

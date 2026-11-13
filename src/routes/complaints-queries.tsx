@@ -15,9 +15,9 @@ import { PageHero, Section, SectionHeading } from "@/components/Section";
 //    {{subject}}, {{message}}, {{reference_id}}
 //    Set the "To Email" in the template to: ieeestudentchapter@ist.srmtrichy.edu.in
 // 4. Copy your Service ID, Template ID and Public Key below.
-const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID ?? "YOUR_SERVICE_ID";
-const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID ?? "YOUR_TEMPLATE_ID";
-const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY ?? "YOUR_PUBLIC_KEY";
+const EMAILJS_SERVICE_ID = (import.meta.env["VITE_EMAILJS_SERVICE_ID"] as string | undefined) ?? "YOUR_SERVICE_ID";
+const EMAILJS_TEMPLATE_ID = (import.meta.env["VITE_EMAILJS_TEMPLATE_ID"] as string | undefined) ?? "YOUR_TEMPLATE_ID";
+const EMAILJS_PUBLIC_KEY = (import.meta.env["VITE_EMAILJS_PUBLIC_KEY"] as string | undefined) ?? "YOUR_PUBLIC_KEY";
 
 const IS_CONFIGURED =
   EMAILJS_SERVICE_ID !== "YOUR_SERVICE_ID" &&
@@ -370,7 +370,7 @@ function Field({
 }: {
   label: string;
   required?: boolean;
-  error?: string;
+  error?: string | undefined;
   children: ReactNode;
 }) {
   return (

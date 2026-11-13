@@ -23,7 +23,6 @@ export const Route = createFileRoute("/documentation")({
 });
 
 const FEATURES = [
-<<<<<<< HEAD
   {
     n: "1",
     title: "Contact Form",
@@ -54,14 +53,6 @@ const FEATURES = [
     title: "Page Builder / Content Management",
     text: "Content is stored in separate data files so administrators can update pages without touching layout code.",
   },
-=======
-  { n: "1", title: "Contact Form", text: "A simple, accessible contact form for students and visitors to reach the branch committee." },
-  { n: "2", title: "Responsive Slider", text: "A responsive image slider used on the home page for announcements and flagship events." },
-  { n: "3", title: "Team Members", text: "Structured profiles for IEEE Student Branch leadership, chapter heads and members." },
-  { n: "4", title: "Events Calendar", text: "A maintained listing of upcoming IEEE events with dates, venues and registration links." },
-  { n: "5", title: "SEO", text: "Per-page titles, meta descriptions, Open Graph tags, semantic markup and structured data." },
-  { n: "6", title: "Page Builder / Content Management", text: "Content is stored in separate data files so administrators can update pages without touching layout code." },
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
 ];
 
 function DocumentationPage() {

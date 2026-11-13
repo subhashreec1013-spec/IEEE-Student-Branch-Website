@@ -12,12 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as ActivitiesRouteImport } from './routes/activities'
-<<<<<<< HEAD
 import { Route as ComplaintsQueriesRouteImport } from './routes/complaints-queries'
-=======
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DocumentationRouteImport } from './routes/documentation'
+import { Route as EventProposalRouteImport } from './routes/event-proposal'
 import { Route as EventsRouteImport } from './routes/events'
 import { Route as MembershipRouteImport } from './routes/membership'
 import { Route as NewsRouteImport } from './routes/news'
@@ -39,14 +37,11 @@ const ActivitiesRoute = ActivitiesRouteImport.update({
   path: '/activities',
   getParentRoute: () => rootRouteImport,
 } as any)
-<<<<<<< HEAD
 const ComplaintsQueriesRoute = ComplaintsQueriesRouteImport.update({
   id: '/complaints-queries',
   path: '/complaints-queries',
   getParentRoute: () => rootRouteImport,
 } as any)
-=======
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -55,6 +50,11 @@ const ContactRoute = ContactRouteImport.update({
 const DocumentationRoute = DocumentationRouteImport.update({
   id: '/documentation',
   path: '/documentation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EventProposalRoute = EventProposalRouteImport.update({
+  id: '/event-proposal',
+  path: '/event-proposal',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EventsRoute = EventsRouteImport.update({
@@ -87,12 +87,10 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/activities': typeof ActivitiesRoute
-<<<<<<< HEAD
   '/complaints-queries': typeof ComplaintsQueriesRoute
-=======
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
   '/contact': typeof ContactRoute
   '/documentation': typeof DocumentationRoute
+  '/event-proposal': typeof EventProposalRoute
   '/events': typeof EventsRoute
   '/membership': typeof MembershipRoute
   '/news': typeof NewsRoute
@@ -103,12 +101,10 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/activities': typeof ActivitiesRoute
-<<<<<<< HEAD
   '/complaints-queries': typeof ComplaintsQueriesRoute
-=======
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
   '/contact': typeof ContactRoute
   '/documentation': typeof DocumentationRoute
+  '/event-proposal': typeof EventProposalRoute
   '/events': typeof EventsRoute
   '/membership': typeof MembershipRoute
   '/news': typeof NewsRoute
@@ -120,12 +116,10 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/activities': typeof ActivitiesRoute
-<<<<<<< HEAD
   '/complaints-queries': typeof ComplaintsQueriesRoute
-=======
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
   '/contact': typeof ContactRoute
   '/documentation': typeof DocumentationRoute
+  '/event-proposal': typeof EventProposalRoute
   '/events': typeof EventsRoute
   '/membership': typeof MembershipRoute
   '/news': typeof NewsRoute
@@ -138,12 +132,10 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/activities'
-<<<<<<< HEAD
     | '/complaints-queries'
-=======
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
     | '/contact'
     | '/documentation'
+    | '/event-proposal'
     | '/events'
     | '/membership'
     | '/news'
@@ -154,12 +146,10 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/activities'
-<<<<<<< HEAD
     | '/complaints-queries'
-=======
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
     | '/contact'
     | '/documentation'
+    | '/event-proposal'
     | '/events'
     | '/membership'
     | '/news'
@@ -170,12 +160,10 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/activities'
-<<<<<<< HEAD
     | '/complaints-queries'
-=======
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
     | '/contact'
     | '/documentation'
+    | '/event-proposal'
     | '/events'
     | '/membership'
     | '/news'
@@ -187,12 +175,10 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   ActivitiesRoute: typeof ActivitiesRoute
-<<<<<<< HEAD
   ComplaintsQueriesRoute: typeof ComplaintsQueriesRoute
-=======
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
   ContactRoute: typeof ContactRoute
   DocumentationRoute: typeof DocumentationRoute
+  EventProposalRoute: typeof EventProposalRoute
   EventsRoute: typeof EventsRoute
   MembershipRoute: typeof MembershipRoute
   NewsRoute: typeof NewsRoute
@@ -223,7 +209,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ActivitiesRouteImport
       parentRoute: typeof rootRouteImport
     }
-<<<<<<< HEAD
     '/complaints-queries': {
       id: '/complaints-queries'
       path: '/complaints-queries'
@@ -231,8 +216,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComplaintsQueriesRouteImport
       parentRoute: typeof rootRouteImport
     }
-=======
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -245,6 +228,13 @@ declare module '@tanstack/react-router' {
       path: '/documentation'
       fullPath: '/documentation'
       preLoaderRoute: typeof DocumentationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/event-proposal': {
+      id: '/event-proposal'
+      path: '/event-proposal'
+      fullPath: '/event-proposal'
+      preLoaderRoute: typeof EventProposalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/events': {
@@ -289,12 +279,10 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   ActivitiesRoute: ActivitiesRoute,
-<<<<<<< HEAD
   ComplaintsQueriesRoute: ComplaintsQueriesRoute,
-=======
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
   ContactRoute: ContactRoute,
   DocumentationRoute: DocumentationRoute,
+  EventProposalRoute: EventProposalRoute,
   EventsRoute: EventsRoute,
   MembershipRoute: MembershipRoute,
   NewsRoute: NewsRoute,

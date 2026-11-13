@@ -68,7 +68,6 @@ function About() {
               ))}
             </div>
           </div>
-<<<<<<< HEAD
           <div className="overflow-hidden rounded-lg border border-border bg-slate-100/80 dark:bg-slate-900/40 shadow-[var(--shadow-card)] flex items-center justify-center max-h-[380px] lg:max-h-[420px]">
             <img
               src={aboutImg}
@@ -77,16 +76,6 @@ function About() {
               height={616}
               loading="lazy"
               className="h-full w-full max-h-[380px] lg:max-h-[420px] object-contain transition-transform duration-500 hover:scale-[1.02]"
-=======
-          <div className="overflow-hidden rounded-md border border-border shadow-[var(--shadow-card)]">
-            <img
-              src={aboutImg}
-              alt="Student volunteers assembling an electronics project"
-              width={1200}
-              height={900}
-              loading="lazy"
-              className="h-full w-full object-cover"
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
             />
           </div>
         </div>

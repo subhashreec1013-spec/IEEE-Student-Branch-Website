@@ -47,7 +47,6 @@ export function Footer() {
       <div className="relative mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
           <div>
-<<<<<<< HEAD
             <div className="flex items-center gap-3">
               <IeeeLogo
                 variant="white"
@@ -55,11 +54,6 @@ export function Footer() {
                 alt="IEEE Student Branch Logo"
               />
               <span className="text-lg font-bold text-primary-foreground">{SITE.name}</span>
-=======
-            <div className="flex items-center gap-2">
-              <IeeeLogo className="h-8 w-8 text-primary-foreground" />
-              <span className="text-lg font-bold">{SITE.name}</span>
->>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
             </div>
             <p className="mt-4 text-sm leading-relaxed text-primary-foreground/85">
               A student-run branch of IEEE at {SITE.institution}, advancing technology for humanity
