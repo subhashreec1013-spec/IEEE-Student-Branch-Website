@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+<<<<<<< HEAD
 import { FileText, Lightbulb } from "lucide-react";
 import { PageHero, Section, SectionHeading } from "@/components/Section";
 import { RESOURCES } from "@/data/site";
@@ -10,6 +11,12 @@ const EVENT_PROPOSAL_FORM_URL = "https://docs.google.com/forms/d/e/YOUR_FORM_ID/
 
 // ─────────────────────────────────────────────────────────────────────────────
 
+=======
+import { FileText } from "lucide-react";
+import { PageHero, Section, SectionHeading } from "@/components/Section";
+import { RESOURCES } from "@/data/site";
+
+>>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
 export const Route = createFileRoute("/resources")({
   head: () => ({
     meta: [
@@ -22,8 +29,12 @@ export const Route = createFileRoute("/resources")({
       { property: "og:title", content: "Resources — IEEE Student Branch" },
       {
         property: "og:description",
+<<<<<<< HEAD
         content:
           "Useful website and member resources maintained by the IEEE Student Branch at SRM IST.",
+=======
+        content: "Useful website and member resources maintained by the IEEE Student Branch at SRM IST.",
+>>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
       },
       { property: "og:url", content: "/resources" },
     ],
@@ -62,6 +73,7 @@ function ResourcesPage() {
           Website Information
         </Link>
       </Section>
+<<<<<<< HEAD
 
       {/* ── Propose an Event ── */}
       <Section className="bg-secondary">
@@ -122,6 +134,8 @@ function ResourcesPage() {
           </div>
         </div>
       </Section>
+=======
+>>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
     </>
   );
 }

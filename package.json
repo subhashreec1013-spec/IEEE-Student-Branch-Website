@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
 {
   "name": "tanstack_start_ts",
   "private": true,
@@ -13,11 +16,17 @@
     "format": "prettier --write ."
   },
   "overrides": {
+<<<<<<< HEAD
     "rolldown": "1.2.1",
     "@tanstack/start-server-core": "1.169.39"
   },
   "dependencies": {
     "@emailjs/browser": "^5.0.3",
+=======
+    "rolldown": "1.2.1"
+  },
+  "dependencies": {
+>>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-alert-dialog": "^1.1.15",
@@ -47,9 +56,15 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "@tailwindcss/vite": "^4.2.1",
     "@tanstack/react-query": "^5.101.1",
+<<<<<<< HEAD
     "@tanstack/react-router": "1.170.41",
     "@tanstack/react-start": "1.168.60",
     "@tanstack/router-plugin": "1.168.42",  
+=======
+    "@tanstack/react-router": "1.170.18",
+    "@tanstack/react-start": "1.168.32",
+    "@tanstack/router-plugin": "1.168.23",
+>>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",

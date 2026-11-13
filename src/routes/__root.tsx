@@ -98,7 +98,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900&display=swap",
       },
+<<<<<<< HEAD
       { rel: "icon", href: "/favicon.png", type: "image/png" },
+=======
+>>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
     scripts: [
@@ -163,3 +166,7 @@ function RootComponent() {
     </QueryClientProvider>
   );
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73

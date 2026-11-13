@@ -14,8 +14,12 @@ export const Route = createFileRoute("/news")({
       { property: "og:title", content: "News & Announcements — IEEE Student Branch" },
       {
         property: "og:description",
+<<<<<<< HEAD
         content:
           "Workshop reports, awards and announcements from the IEEE Student Branch at SRM IST.",
+=======
+        content: "Workshop reports, awards and announcements from the IEEE Student Branch at SRM IST.",
+>>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
       },
       { property: "og:url", content: "/news" },
     ],
@@ -28,7 +32,11 @@ function NewsPage() {
   return (
     <>
       <PageHero
+<<<<<<< HEAD
         title="Recent Activities Done"
+=======
+        title="Latest News & Announcements"
+>>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
         subtitle="Reports from recent activities, branch recognitions and updates for members."
       />
       <Section>

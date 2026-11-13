@@ -1,7 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { MembershipSection } from "@/components/MembershipSection";
 import { PageHero, Section, SectionHeading } from "@/components/Section";
+<<<<<<< HEAD
 import membershipQrImg from "@/assets/ieee-membership-qr-scan.png";
+=======
+>>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
 
 export const Route = createFileRoute("/membership")({
   head: () => ({
@@ -25,6 +28,7 @@ export const Route = createFileRoute("/membership")({
 });
 
 const STEPS = [
+<<<<<<< HEAD
   {
     step: "01",
     title: "Create an IEEE Account",
@@ -45,6 +49,12 @@ const STEPS = [
     title: "Start Volunteering",
     text: "Email the branch and join a chapter, project team or event committee.",
   },
+=======
+  { step: "01", title: "Create an IEEE Account", text: "Register at ieee.org with your institutional email address." },
+  { step: "02", title: "Select Student Membership", text: "Choose student grade membership and add optional society memberships." },
+  { step: "03", title: "Link to Our Branch", text: "Select SRM Institute of Science and Technology as your student branch." },
+  { step: "04", title: "Start Volunteering", text: "Email the branch and join a chapter, project team or event committee." },
+>>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
 ];
 
 function MembershipPage() {
@@ -53,6 +63,7 @@ function MembershipPage() {
       <PageHero
         title="Become a Member"
         subtitle="Join a global community of students, engineers, researchers and technology professionals."
+<<<<<<< HEAD
       >
         <a
           href="https://www.ieee.org/membership/join/"
@@ -68,6 +79,9 @@ function MembershipPage() {
           />
         </a>
       </PageHero>
+=======
+      />
+>>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
       <Section>
         <MembershipSection />
       </Section>

@@ -16,9 +16,13 @@ export function SectionHeading({
       {eyebrow && (
         <p className="text-xs font-bold uppercase tracking-[0.18em] text-accent">{eyebrow}</p>
       )}
+<<<<<<< HEAD
       <h2 className="mt-2 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
         {title}
       </h2>
+=======
+      <h2 className="mt-2 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">{title}</h2>
+>>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
       <span
         className={`mt-3 block h-1 w-14 bg-accent ${align === "center" ? "mx-auto" : ""}`}
         aria-hidden="true"
@@ -52,6 +56,7 @@ export function Section({
   );
 }
 
+<<<<<<< HEAD
 export function PageHero({
   title,
   subtitle,
@@ -73,6 +78,18 @@ export function PageHero({
           </div>
           {children && <div className="shrink-0 self-start md:self-center">{children}</div>}
         </div>
+=======
+export function PageHero({ title, subtitle }: { title: string; subtitle: string }) {
+  return (
+    <div className="border-b-4 border-accent bg-primary">
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+        <h1 className="text-3xl font-bold tracking-tight text-primary-foreground sm:text-4xl">
+          {title}
+        </h1>
+        <p className="mt-3 max-w-2xl text-base leading-relaxed text-primary-foreground/85">
+          {subtitle}
+        </p>
+>>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
       </div>
     </div>
   );

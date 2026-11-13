@@ -110,6 +110,10 @@
   --sidebar-ring: oklch(0.704 0.04 256.788);
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
 .dark {
   --background: oklch(0.129 0.042 264.695);
   --foreground: oklch(0.984 0.003 247.858);

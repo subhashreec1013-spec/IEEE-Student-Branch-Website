@@ -12,7 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as ActivitiesRouteImport } from './routes/activities'
+<<<<<<< HEAD
 import { Route as ComplaintsQueriesRouteImport } from './routes/complaints-queries'
+=======
+>>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DocumentationRouteImport } from './routes/documentation'
 import { Route as EventsRouteImport } from './routes/events'
@@ -36,11 +39,14 @@ const ActivitiesRoute = ActivitiesRouteImport.update({
   path: '/activities',
   getParentRoute: () => rootRouteImport,
 } as any)
+<<<<<<< HEAD
 const ComplaintsQueriesRoute = ComplaintsQueriesRouteImport.update({
   id: '/complaints-queries',
   path: '/complaints-queries',
   getParentRoute: () => rootRouteImport,
 } as any)
+=======
+>>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -81,7 +87,10 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/activities': typeof ActivitiesRoute
+<<<<<<< HEAD
   '/complaints-queries': typeof ComplaintsQueriesRoute
+=======
+>>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
   '/contact': typeof ContactRoute
   '/documentation': typeof DocumentationRoute
   '/events': typeof EventsRoute
@@ -94,7 +103,10 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/activities': typeof ActivitiesRoute
+<<<<<<< HEAD
   '/complaints-queries': typeof ComplaintsQueriesRoute
+=======
+>>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
   '/contact': typeof ContactRoute
   '/documentation': typeof DocumentationRoute
   '/events': typeof EventsRoute
@@ -108,7 +120,10 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/activities': typeof ActivitiesRoute
+<<<<<<< HEAD
   '/complaints-queries': typeof ComplaintsQueriesRoute
+=======
+>>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
   '/contact': typeof ContactRoute
   '/documentation': typeof DocumentationRoute
   '/events': typeof EventsRoute
@@ -123,7 +138,10 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/activities'
+<<<<<<< HEAD
     | '/complaints-queries'
+=======
+>>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
     | '/contact'
     | '/documentation'
     | '/events'
@@ -136,7 +154,10 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/activities'
+<<<<<<< HEAD
     | '/complaints-queries'
+=======
+>>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
     | '/contact'
     | '/documentation'
     | '/events'
@@ -149,7 +170,10 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/activities'
+<<<<<<< HEAD
     | '/complaints-queries'
+=======
+>>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
     | '/contact'
     | '/documentation'
     | '/events'
@@ -163,7 +187,10 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   ActivitiesRoute: typeof ActivitiesRoute
+<<<<<<< HEAD
   ComplaintsQueriesRoute: typeof ComplaintsQueriesRoute
+=======
+>>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
   ContactRoute: typeof ContactRoute
   DocumentationRoute: typeof DocumentationRoute
   EventsRoute: typeof EventsRoute
@@ -196,6 +223,7 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ActivitiesRouteImport
       parentRoute: typeof rootRouteImport
     }
+<<<<<<< HEAD
     '/complaints-queries': {
       id: '/complaints-queries'
       path: '/complaints-queries'
@@ -203,6 +231,8 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComplaintsQueriesRouteImport
       parentRoute: typeof rootRouteImport
     }
+=======
+>>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -259,7 +289,10 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   ActivitiesRoute: ActivitiesRoute,
+<<<<<<< HEAD
   ComplaintsQueriesRoute: ComplaintsQueriesRoute,
+=======
+>>>>>>> b8a328fd82eaa9d72376afee2d25eba7169a5e73
   ContactRoute: ContactRoute,
   DocumentationRoute: DocumentationRoute,
   EventsRoute: EventsRoute,
