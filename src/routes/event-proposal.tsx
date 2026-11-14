@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import emailjs from "@emailjs/browser";
 import { useRef, useState } from "react";
 import type { FormEvent } from "react";
@@ -19,10 +19,13 @@ import {
   BadgeCheck,
   AlertTriangle,
   Info,
+  ArrowRight,
+  ArrowLeft,
 } from "lucide-react";
 import { PageHero } from "@/components/Section";
 import {
   verifyIeeeMembership,
+  submitEventProposalServerFn,
   type MembershipVerificationResult,
 } from "@/lib/membership-verifier";
 
@@ -208,6 +211,7 @@ function EventProposalPage() {
 
   const [form, setForm] = useState<ProposalFormData>(INITIAL_FORM);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [currentSection, setCurrentSection] = useState<1 | 2 | 3>(1);
 
   const update = <K extends keyof ProposalFormData>(key: K, value: ProposalFormData[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -226,8 +230,8 @@ function EventProposalPage() {
     try {
       const result = await verifyIeeeMembership({
         data: {
-          membershipId: form.membershipId,
-          email: form.membershipEmail,
+          membershipId: form.membershipId.trim(),
+          email: form.membershipEmail.trim(),
         },
       });
       setVerificationResult(result);
@@ -236,9 +240,9 @@ function EventProposalPage() {
       console.error("Server verification check error:", err);
       const fallbackResult: MembershipVerificationResult = {
         verified: false,
-        status: "pending_roster_check",
+        status: "not_found",
         message:
-          "Unable to reach server verification service. Proposal will be processed under 'Pending Committee Verification' workflow.",
+          "Unable to complete membership verification. Please check your internet connection and try again.",
       };
       setVerificationResult(fallbackResult);
       return fallbackResult;
@@ -247,18 +251,17 @@ function EventProposalPage() {
     }
   }
 
-  function validate(): boolean {
+  function validateSection1(): boolean {
     const errs: Record<string, string> = {};
 
-    // ── Section 1: IEEE Membership Identification ──
     if (!form.fullName.trim() || form.fullName.trim().length < 2) {
       errs["fullName"] = "Full name is required (at least 2 characters).";
     }
     if (!form.membershipId.trim()) {
-      errs["membershipId"] = "IEEE Membership ID is required.";
+      errs["membershipId"] = "IEEE Membership Number is required.";
     } else if (!/^\d{5,10}$/.test(form.membershipId.trim())) {
       errs["membershipId"] =
-        "IEEE Membership ID must be a valid numeric membership number (typically 7–9 digits).";
+        "IEEE Membership Number must be a valid numeric membership number (typically 7–9 digits).";
     }
 
     if (!form.membershipEmail.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.membershipEmail)) {
@@ -278,7 +281,13 @@ function EventProposalPage() {
         "You must confirm that you are a registered IEEE member and that details provided are accurate.";
     }
 
-    // ── Section 2: Event Information ──
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
+  }
+
+  function validateSection2(): boolean {
+    const errs: Record<string, string> = {};
+
     if (!form.eventTitle.trim() || form.eventTitle.trim().length < 3) {
       errs["eventTitle"] = "Event title is required (at least 3 characters).";
     }
@@ -307,7 +316,13 @@ function EventProposalPage() {
       errs["targetAudience"] = "Target audience is required (e.g. All B.Tech, CSE/ECE students).";
     }
 
-    // ── Section 3: Proposal Description ──
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
+  }
+
+  function validateSection3(): boolean {
+    const errs: Record<string, string> = {};
+
     if (!form.description.trim() || form.description.trim().length < 15) {
       errs["description"] = "Please provide an event description (at least 15 characters).";
     }
@@ -332,8 +347,6 @@ function EventProposalPage() {
     if (!form.expectedOutcomes.trim() || form.expectedOutcomes.trim().length < 10) {
       errs["expectedOutcomes"] = "Expected outcomes are required (at least 10 characters).";
     }
-
-    // Final confirmation
     if (!form.confirmedCoreMember) {
       errs["confirmedCoreMember"] =
         "You must confirm that you are submitting this proposal as an IEEE Student Branch Core Committee member.";
@@ -341,6 +354,58 @@ function EventProposalPage() {
 
     setErrors(errs);
     return Object.keys(errs).length === 0;
+  }
+
+  function validate(): boolean {
+    if (!validateSection1()) {
+      setCurrentSection(1);
+      return false;
+    }
+    if (!validateSection2()) {
+      setCurrentSection(2);
+      return false;
+    }
+    if (!validateSection3()) {
+      setCurrentSection(3);
+      return false;
+    }
+    return true;
+  }
+
+  async function handleNextFromSection1() {
+    setErrorMsg("");
+    const isValid = validateSection1();
+    if (!isValid) {
+      window.scrollTo({ top: 350, behavior: "smooth" });
+      return;
+    }
+
+    // Check verification status
+    let vResult = verificationResult;
+    if (!vResult || vResult.status !== "verified") {
+      vResult = await performVerificationCheck();
+    }
+
+    if (!vResult.verified) {
+      setErrorMsg(vResult.message || "Please enter a valid active IEEE membership number.");
+      window.scrollTo({ top: 350, behavior: "smooth" });
+      return;
+    }
+
+    setCurrentSection(2);
+    window.scrollTo({ top: 120, behavior: "smooth" });
+  }
+
+  function handleNextFromSection2() {
+    setErrorMsg("");
+    const isValid = validateSection2();
+    if (!isValid) {
+      window.scrollTo({ top: 350, behavior: "smooth" });
+      return;
+    }
+
+    setCurrentSection(3);
+    window.scrollTo({ top: 120, behavior: "smooth" });
   }
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -354,19 +419,11 @@ function EventProposalPage() {
 
     setStatus("submitting");
 
-    // Perform server-side verification check
+    // Perform server-side membership verification check
     const verification = await performVerificationCheck();
 
-    // If an approved database is configured and the member was explicitly NOT found, block submission
-    if (verification.status === "not_found") {
-      setErrorMsg(
-        "Membership Verification Failed: The provided IEEE Membership ID and email were not found in the authorised IEEE Student Branch committee records. Only authorised branch members may submit event proposals. Please check your details or contact the executive committee.",
-      );
-      setStatus("error");
-      return;
-    }
-
-    if (verification.status === "invalid_format") {
+    // Block submission if membership number is not verified active
+    if (!verification.verified) {
       setErrorMsg(verification.message);
       setStatus("error");
       return;
@@ -378,21 +435,54 @@ function EventProposalPage() {
       .slice(2, 8)
       .toUpperCase()}`;
 
-    if (!IS_CONFIGURED) {
+    // Backend database storage submission with verified IEEE membership number
+    try {
+      const serverResult = await submitEventProposalServerFn({
+        data: {
+          referenceId: refId,
+          membershipNumber: form.membershipId.trim(),
+          fullName: form.fullName.trim(),
+          membershipEmail: form.membershipEmail.trim(),
+          membershipGrade: form.membershipGrade,
+          branchPosition: form.branchPosition,
+          registerNumber: form.registerNumber.trim(),
+          eventTitle: form.eventTitle.trim(),
+          category: form.category,
+          proposedDate: form.proposedDate.trim(),
+          startTime: form.startTime.trim(),
+          endTime: form.endTime.trim(),
+          venue: form.venue.trim(),
+          eventMode: form.eventMode,
+          expectedParticipants: form.expectedParticipants.trim(),
+          targetAudience: form.targetAudience.trim(),
+          description: form.description.trim(),
+          objectives: form.objectives.trim(),
+          agenda: form.agenda.trim(),
+          technicalRequirements: form.technicalRequirements.trim(),
+          resourcesRequired: form.resourcesRequired.trim(),
+          estimatedBudget: form.estimatedBudget.trim(),
+          expectedOutcomes: form.expectedOutcomes.trim(),
+        },
+      });
+
+      if (!serverResult.success) {
+        setErrorMsg(serverResult.message);
+        setStatus("error");
+        return;
+      }
+    } catch (saveErr) {
+      console.error("Backend proposal storage error:", saveErr);
       setErrorMsg(
-        "Email delivery service is currently not configured on the server. Please contact the branch administrator at ieeestudentchapter@ist.srmtrichy.edu.in.",
+        "Unable to record proposal on server. Please check your network connection and try again.",
       );
       setStatus("error");
       return;
     }
 
-    const verificationBadgeText =
-      verification.status === "verified"
-        ? "AUTHENTICATED (Server Roster Verified)"
-        : "PENDING VERIFICATION (Awaiting Committee Manual vTools Verification)";
-
-    const structuredMessage = `
-EVENT PROPOSAL SUBMISSION (GOOGLE FORMS STYLE)
+    // Dispatch email notification if EmailJS is configured
+    if (IS_CONFIGURED) {
+      const structuredMessage = `
+EVENT PROPOSAL SUBMISSION
 ============================================================
 Proposal Reference ID: ${refId}
 Submitted Timestamp: ${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}
@@ -400,13 +490,13 @@ Submitted Timestamp: ${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolk
 [SECTION 1: IEEE MEMBERSHIP IDENTIFICATION]
 ------------------------------------------------------------
 1. Full Name: ${form.fullName}
-2. IEEE Membership ID: ${form.membershipId}
+2. IEEE Membership Number: ${form.membershipId.trim()}
 3. Registered IEEE Email: ${form.membershipEmail}
 4. IEEE Membership Grade: ${form.membershipGrade}
 5. Student Branch Position: ${form.branchPosition}
 6. SRM Register Number: ${form.registerNumber}
 7. Membership Declaration: Confirmed by Proposer
-* Verification Status: ${verificationBadgeText}
+* Verification Status: ACTIVE & VERIFIED
 * Verification Detail: ${verification.message}
 
 [SECTION 2: EVENT INFORMATION]
@@ -451,48 +541,42 @@ Sent via IEEE Student Branch Event Proposal Portal
 (SRM Institute of Science and Technology, Tiruchirappalli)
 `.trim();
 
-    try {
-      await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        {
-          from_name: form.fullName,
-          from_email: form.membershipEmail,
-          register_number: form.registerNumber,
-          category: "Event Proposal",
-          subject: `[Event Proposal] ${form.eventTitle}`,
-          message: structuredMessage,
-          reference_id: refId,
-          to_email: "ieeestudentchapter@ist.srmtrichy.edu.in",
-        },
-        { publicKey: EMAILJS_PUBLIC_KEY },
-      );
-
-      setReferenceId(refId);
-      setSubmittedSnapshot({
-        title: form.eventTitle,
-        proposer: form.fullName,
-        membershipId: form.membershipId,
-        membershipGrade: form.membershipGrade,
-        position: form.branchPosition,
-        date: form.proposedDate,
-        category: form.category,
-        verificationStatus:
-          verification.status === "verified"
-            ? "Verified against Roster"
-            : "Pending Committee Verification",
-      });
-      setStatus("success");
-      setForm(INITIAL_FORM);
-      formRef.current?.reset();
-      window.scrollTo({ top: 120, behavior: "smooth" });
-    } catch (err: unknown) {
-      console.error("EmailJS Event Proposal Error:", err);
-      setErrorMsg(
-        "Unable to send your event proposal at this moment. Please check your internet connection or try again. All entered form data has been preserved.",
-      );
-      setStatus("error");
+      try {
+        await emailjs.send(
+          EMAILJS_SERVICE_ID,
+          EMAILJS_TEMPLATE_ID,
+          {
+            from_name: form.fullName,
+            from_email: form.membershipEmail,
+            register_number: form.registerNumber,
+            category: "Event Proposal",
+            subject: `[Event Proposal] ${form.eventTitle} (Member #${form.membershipId.trim()})`,
+            message: structuredMessage,
+            reference_id: refId,
+            to_email: "ieeestudentchapter@ist.srmtrichy.edu.in",
+          },
+          { publicKey: EMAILJS_PUBLIC_KEY },
+        );
+      } catch (err: unknown) {
+        console.warn("EmailJS notification skipped/errored:", err);
+      }
     }
+
+    setReferenceId(refId);
+    setSubmittedSnapshot({
+      title: form.eventTitle,
+      proposer: form.fullName,
+      membershipId: form.membershipId.trim(),
+      membershipGrade: form.membershipGrade,
+      position: form.branchPosition,
+      date: form.proposedDate,
+      category: form.category,
+      verificationStatus: "Verified Active Member",
+    });
+    setStatus("success");
+    setForm(INITIAL_FORM);
+    formRef.current?.reset();
+    window.scrollTo({ top: 120, behavior: "smooth" });
   }
 
   // ── SUCCESS CONFIRMATION VIEW ──────────────────────────────────────────────
@@ -598,7 +682,7 @@ Sent via IEEE Student Branch Event Proposal Portal
                       {submittedSnapshot.date}
                     </div>
                     <div>
-                      <span className="font-semibold text-foreground">IEEE Member ID: </span>
+                      <span className="font-semibold text-foreground">IEEE Membership Number: </span>
                       {submittedSnapshot.membershipId}
                     </div>
                     <div>
@@ -675,6 +759,35 @@ Sent via IEEE Student Branch Event Proposal Portal
           </div>
         </div>
 
+        {/* ================= STEPPER & PROGRESS INDICATOR ================= */}
+        <div className="overflow-hidden rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 text-xs">
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-primary">
+                Section {currentSection} of 3:
+              </span>
+              <span className="font-semibold text-foreground">
+                {currentSection === 1 && "IEEE Membership Verification"}
+                {currentSection === 2 && "Event Information"}
+                {currentSection === 3 && "Proposal Description & Logistics"}
+              </span>
+            </div>
+            <span className="text-[11px] font-medium text-muted-foreground">
+              {currentSection === 1 && "Step 1 of 3"}
+              {currentSection === 2 && "Step 2 of 3"}
+              {currentSection === 3 && "Step 3 of 3 (Final Step)"}
+            </span>
+          </div>
+          <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-100 border border-slate-200">
+            <div
+              className="h-full bg-primary transition-all duration-300 rounded-full"
+              style={{
+                width: currentSection === 1 ? "33.33%" : currentSection === 2 ? "66.66%" : "100%",
+              }}
+            />
+          </div>
+        </div>
+
         {/* ================= ERROR BANNER ================= */}
         {status === "error" && errorMsg && (
           <div
@@ -691,637 +804,752 @@ Sent via IEEE Student Branch Event Proposal Portal
           </div>
         )}
 
-        <form ref={formRef} onSubmit={handleSubmit} noValidate className="space-y-4">
+        <form
+          ref={formRef}
+          onSubmit={handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && (e.target as HTMLElement).tagName === "INPUT") {
+              e.preventDefault();
+              if (currentSection === 1) {
+                handleNextFromSection1();
+              } else if (currentSection === 2) {
+                handleNextFromSection2();
+              }
+            }
+          }}
+          noValidate
+          className="space-y-4"
+        >
           {/* ================= SECTION 1: IEEE MEMBERSHIP VERIFICATION ================= */}
-          <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
-            {/* Section Header */}
-            <div className="border-b border-border bg-slate-50/80 px-6 py-4">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-accent">
-                <span className="grid h-5 w-5 place-items-center rounded bg-primary text-white text-[0.65rem]">
-                  1
-                </span>
-                Section 1 of 3
+          {currentSection === 1 && (
+            <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+              {/* Section Header */}
+              <div className="border-b border-border bg-slate-50/80 px-6 py-4">
+                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-accent">
+                  <span className="grid h-5 w-5 place-items-center rounded bg-primary text-white text-[0.65rem]">
+                    1
+                  </span>
+                  Section 1 of 3
+                </div>
+                <h2 className="mt-1 text-lg font-bold text-primary sm:text-xl">
+                  IEEE Membership Verification
+                </h2>
+                <p className="mt-1 text-xs text-muted-foreground leading-relaxed sm:text-sm">
+                  This event proposal form is exclusively available to registered IEEE members and
+                  authorised IEEE Student Branch committee members. Please provide your official
+                  membership details.
+                </p>
               </div>
-              <h2 className="mt-1 text-lg font-bold text-primary sm:text-xl">
-                IEEE Membership Verification
-              </h2>
-              <p className="mt-1 text-xs text-muted-foreground leading-relaxed sm:text-sm">
-                This event proposal form is exclusively available to registered IEEE members and
-                authorised IEEE Student Branch committee members. Please provide your official
-                membership details.
-              </p>
-            </div>
 
-            <div className="p-6 sm:p-8 space-y-6">
-              {/* Question 1: Full Name */}
-              <GFormField
-                number="1"
-                label="Full Name"
-                required
-                error={errors["fullName"]}
-                hint="Your official name as registered with IEEE."
-              >
-                <input
-                  type="text"
+              <div className="p-6 sm:p-8 space-y-6">
+                {/* Question 1: Full Name */}
+                <GFormField
+                  number="1"
+                  label="Full Name"
                   required
-                  value={form.fullName}
-                  onChange={(e) => update("fullName", e.target.value)}
-                  placeholder="Your answer"
-                  autoComplete="name"
-                  className={gInputClass(!!errors["fullName"])}
-                />
-              </GFormField>
+                  error={errors["fullName"]}
+                  hint="Your official name as registered with IEEE."
+                >
+                  <input
+                    type="text"
+                    required
+                    value={form.fullName}
+                    onChange={(e) => update("fullName", e.target.value)}
+                    placeholder="Your answer"
+                    autoComplete="name"
+                    className={gInputClass(!!errors["fullName"])}
+                  />
+                </GFormField>
 
-              {/* Question 2: IEEE Membership ID */}
-              <GFormField
-                number="2"
-                label="IEEE Membership ID / Membership Number"
-                required
-                error={errors["membershipId"]}
-                hint="Your 7 to 9-digit numeric IEEE membership identifier (e.g. 98765432)."
-              >
-                <div className="space-y-2">
-                  <div className="flex flex-col sm:flex-row gap-2">
+                {/* Question 2: IEEE Membership Number */}
+                <GFormField
+                  number="2"
+                  label="IEEE Membership Number"
+                  required
+                  error={errors["membershipId"]}
+                  hint="Your official active IEEE membership number (e.g. 100276857)."
+                >
+                  <div className="space-y-2">
+                    <div className="flex flex-col sm:row gap-2">
+                      <input
+                        type="text"
+                        required
+                        inputMode="numeric"
+                        value={form.membershipId}
+                        onChange={(e) => {
+                          update("membershipId", e.target.value);
+                          setVerificationResult(null);
+                        }}
+                        placeholder="e.g. 100276857"
+                        className={gInputClass(!!errors["membershipId"])}
+                      />
+                      <button
+                        type="button"
+                        disabled={verifyingMembership || !form.membershipId.trim()}
+                        onClick={performVerificationCheck}
+                        className="inline-flex h-11 shrink-0 items-center justify-center gap-1.5 rounded-md border border-primary/30 bg-primary/5 px-4 text-xs font-bold uppercase tracking-wider text-primary hover:bg-primary hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                      >
+                        {verifyingMembership ? (
+                          <>
+                            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                            Checking…
+                          </>
+                        ) : (
+                          <>
+                            <BadgeCheck className="h-4 w-4" />
+                            Verify Status
+                          </>
+                        )}
+                      </button>
+                    </div>
+
+                    {/* Verification status feedback */}
+                    {verificationResult && (
+                      <div
+                        className={`rounded-md p-3 text-xs leading-relaxed flex items-start gap-2 ${
+                          verificationResult.status === "verified"
+                            ? "bg-green-50 border border-green-200 text-green-900"
+                            : "bg-red-50 border border-red-200 text-red-900"
+                        }`}
+                      >
+                        {verificationResult.status === "verified" ? (
+                          <CheckCircle2 className="h-4 w-4 text-green-600 shrink-0 mt-0.5" />
+                        ) : (
+                          <XCircle className="h-4 w-4 text-red-600 shrink-0 mt-0.5" />
+                        )}
+                        <div>
+                          <strong className="block font-semibold">
+                            {verificationResult.status === "verified"
+                              ? "Active IEEE Membership Verified"
+                              : verificationResult.status === "expired"
+                                ? "Membership Expired"
+                                : verificationResult.status === "invalid_format"
+                                  ? "Invalid Membership Number Format"
+                                  : "Membership Verification Failed"}
+                          </strong>
+                          <span>{verificationResult.message}</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </GFormField>
+
+                {/* Question 3: Registered IEEE Email */}
+                <GFormField
+                  number="3"
+                  label="Registered IEEE Membership Email Address"
+                  required
+                  error={errors["membershipEmail"]}
+                  hint="The email address tied to your official IEEE account (e.g. you@ieee.org or institutional email)."
+                >
+                  <input
+                    type="email"
+                    required
+                    value={form.membershipEmail}
+                    onChange={(e) => update("membershipEmail", e.target.value)}
+                    placeholder="name@ieee.org or you@srmist.edu.in"
+                    autoComplete="email"
+                    className={gInputClass(!!errors["membershipEmail"])}
+                  />
+                </GFormField>
+
+                {/* Question 4: IEEE Membership Grade (Radio Group) */}
+                <GFormField
+                  number="4"
+                  label="IEEE Membership Grade"
+                  required
+                  error={errors["membershipGrade"]}
+                  hint="Select your current grade in the IEEE global membership system."
+                >
+                  <div className="mt-2 space-y-2.5">
+                    {MEMBERSHIP_GRADES.map((grade) => (
+                      <label
+                        key={grade}
+                        className="flex items-center gap-3 p-2 rounded-md hover:bg-slate-50 cursor-pointer transition-colors"
+                      >
+                        <input
+                          type="radio"
+                          name="membershipGrade"
+                          value={grade}
+                          checked={form.membershipGrade === grade}
+                          onChange={() => update("membershipGrade", grade)}
+                          className="h-4 w-4 text-primary focus:ring-accent border-gray-300"
+                        />
+                        <span className="text-sm font-medium text-foreground">{grade}</span>
+                      </label>
+                    ))}
+                  </div>
+                </GFormField>
+
+                {/* Question 5: IEEE Student Branch Position (Radio Group) */}
+                <GFormField
+                  number="5"
+                  label="IEEE Student Branch Position"
+                  required
+                  error={errors["branchPosition"]}
+                  hint="Your designated role within the SRMIST Student Branch."
+                >
+                  <div className="mt-2 grid gap-2 sm:grid-cols-2">
+                    {BRANCH_POSITIONS.map((pos) => (
+                      <label
+                        key={pos}
+                        className="flex items-center gap-3 p-2 rounded-md hover:bg-slate-50 cursor-pointer transition-colors"
+                      >
+                        <input
+                          type="radio"
+                          name="branchPosition"
+                          value={pos}
+                          checked={form.branchPosition === pos}
+                          onChange={() => update("branchPosition", pos)}
+                          className="h-4 w-4 text-primary focus:ring-accent border-gray-300"
+                        />
+                        <span className="text-sm font-medium text-foreground">{pos}</span>
+                      </label>
+                    ))}
+                  </div>
+                </GFormField>
+
+                {/* Question 6: SRM Register Number */}
+                <GFormField
+                  number="6"
+                  label="SRM Register Number"
+                  required
+                  error={errors["registerNumber"]}
+                  hint="Official university registration number."
+                >
+                  <input
+                    type="text"
+                    required
+                    value={form.registerNumber}
+                    onChange={(e) => update("registerNumber", e.target.value)}
+                    placeholder="e.g. RA2211003010xxx"
+                    className={gInputClass(!!errors["registerNumber"])}
+                  />
+                </GFormField>
+
+                {/* Question 7: Membership Confirmation Checkbox */}
+                <div className="pt-2">
+                  <label className="flex items-start gap-3 p-3 rounded-lg border border-border bg-slate-50/60 hover:bg-slate-50 cursor-pointer transition-colors">
+                    <input
+                      type="checkbox"
+                      required
+                      checked={form.membershipConfirmed}
+                      onChange={(e) => update("membershipConfirmed", e.target.checked)}
+                      className="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-accent"
+                    />
+                    <span className="text-sm font-medium text-foreground leading-relaxed">
+                      I confirm that I am a registered IEEE member and that the membership details
+                      provided above are accurate. <span className="text-destructive">*</span>
+                    </span>
+                  </label>
+                  {errors["membershipConfirmed"] && (
+                    <p className="mt-1 text-xs text-destructive flex items-center gap-1 font-medium">
+                      <XCircle className="h-3.5 w-3.5" />
+                      {errors["membershipConfirmed"]}
+                    </p>
+                  )}
+                </div>
+
+                {/* Navigation Actions for Section 1 */}
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4 border-t border-border">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (window.confirm("Are you sure you want to clear this form?")) {
+                        setForm(INITIAL_FORM);
+                        setErrors({});
+                        setVerificationResult(null);
+                      }
+                    }}
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors self-start"
+                  >
+                    <RotateCcw className="h-3.5 w-3.5" />
+                    Clear form
+                  </button>
+
+                  <button
+                    type="button"
+                    disabled={verifyingMembership}
+                    onClick={handleNextFromSection1}
+                    className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-primary px-7 text-xs font-bold uppercase tracking-widest text-primary-foreground shadow transition-colors hover:bg-primary-deep cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed ml-auto"
+                  >
+                    {verifyingMembership ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Verifying Membership…
+                      </>
+                    ) : (
+                      <>
+                        Next
+                        <ArrowRight className="h-4 w-4" />
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ================= SECTION 2: EVENT INFORMATION ================= */}
+          {currentSection === 2 && (
+            <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+              <div className="border-b border-border bg-slate-50/80 px-6 py-4">
+                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-accent">
+                  <span className="grid h-5 w-5 place-items-center rounded bg-primary text-white text-[0.65rem]">
+                    2
+                  </span>
+                  Section 2 of 3
+                </div>
+                <h2 className="mt-1 text-lg font-bold text-primary sm:text-xl">
+                  Event Information
+                </h2>
+                <p className="mt-1 text-xs text-muted-foreground leading-relaxed sm:text-sm">
+                  Provide the high-level details, target date, mode, and expected attendance.
+                </p>
+              </div>
+
+              <div className="p-6 sm:p-8 space-y-6">
+                {/* Question 8: Event Title */}
+                <GFormField
+                  number="8"
+                  label="Event Title"
+                  required
+                  error={errors["eventTitle"]}
+                  hint="Clear, compelling title for the proposed event."
+                >
+                  <input
+                    type="text"
+                    required
+                    value={form.eventTitle}
+                    onChange={(e) => update("eventTitle", e.target.value)}
+                    placeholder="Your answer"
+                    className={gInputClass(!!errors["eventTitle"])}
+                  />
+                </GFormField>
+
+                {/* Question 9: Event Category */}
+                <GFormField
+                  number="9"
+                  label="Event Category"
+                  required
+                  error={errors["category"]}
+                  hint="Select the category that best describes the format."
+                >
+                  <select
+                    value={form.category}
+                    onChange={(e) => update("category", e.target.value as EventCategory)}
+                    className={gInputClass(!!errors["category"])}
+                  >
+                    {CATEGORIES.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
+                </GFormField>
+
+                {/* Question 10: Proposed Date */}
+                <GFormField
+                  number="10"
+                  label="Proposed Date"
+                  required
+                  error={errors["proposedDate"]}
+                  hint="Target date for hosting the event."
+                >
+                  <input
+                    type="date"
+                    required
+                    value={form.proposedDate}
+                    onChange={(e) => update("proposedDate", e.target.value)}
+                    className={gInputClass(!!errors["proposedDate"])}
+                  />
+                </GFormField>
+
+                {/* Question 11: Timing */}
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <GFormField
+                    number="11a"
+                    label="Start Time"
+                    required
+                    error={errors["startTime"]}
+                  >
+                    <input
+                      type="time"
+                      required
+                      value={form.startTime}
+                      onChange={(e) => update("startTime", e.target.value)}
+                      className={gInputClass(!!errors["startTime"])}
+                    />
+                  </GFormField>
+
+                  <GFormField
+                    number="11b"
+                    label="End Time"
+                    required
+                    error={errors["endTime"]}
+                  >
+                    <input
+                      type="time"
+                      required
+                      value={form.endTime}
+                      onChange={(e) => update("endTime", e.target.value)}
+                      className={gInputClass(!!errors["endTime"])}
+                    />
+                  </GFormField>
+                </div>
+
+                {/* Question 12: Event Venue */}
+                <GFormField
+                  number="12"
+                  label="Event Venue"
+                  required
+                  error={errors["venue"]}
+                  hint="Physical campus venue or online meeting link."
+                >
+                  <input
+                    type="text"
+                    required
+                    value={form.venue}
+                    onChange={(e) => update("venue", e.target.value)}
+                    placeholder="e.g. IST 501 Seminar Hall / Google Meet"
+                    className={gInputClass(!!errors["venue"])}
+                  />
+                </GFormField>
+
+                {/* Question 13: Event Mode (Radio Group) */}
+                <GFormField
+                  number="13"
+                  label="Event Mode"
+                  required
+                  error={errors["eventMode"]}
+                  hint="Delivery modality."
+                >
+                  <div className="mt-2 flex flex-wrap gap-4">
+                    {EVENT_MODES.map((mode) => (
+                      <label
+                        key={mode}
+                        className="flex items-center gap-2.5 p-2 rounded-md hover:bg-slate-50 cursor-pointer"
+                      >
+                        <input
+                          type="radio"
+                          name="eventMode"
+                          value={mode}
+                          checked={form.eventMode === mode}
+                          onChange={() => update("eventMode", mode)}
+                          className="h-4 w-4 text-primary focus:ring-accent border-gray-300"
+                        />
+                        <span className="text-sm font-medium text-foreground">{mode}</span>
+                      </label>
+                    ))}
+                  </div>
+                </GFormField>
+
+                {/* Question 14: Expected Participants */}
+                <GFormField
+                  number="14"
+                  label="Expected Number of Participants"
+                  required
+                  error={errors["expectedParticipants"]}
+                  hint="Estimated participant attendance."
+                >
+                  <input
+                    type="text"
+                    required
+                    value={form.expectedParticipants}
+                    onChange={(e) => update("expectedParticipants", e.target.value)}
+                    placeholder="e.g. 80–120 participants"
+                    className={gInputClass(!!errors["expectedParticipants"])}
+                  />
+                </GFormField>
+
+                {/* Question 15: Target Audience */}
+                <GFormField
+                  number="15"
+                  label="Target Audience"
+                  required
+                  error={errors["targetAudience"]}
+                  hint="Eligible participants and focus batches."
+                >
+                  <input
+                    type="text"
+                    required
+                    value={form.targetAudience}
+                    onChange={(e) => update("targetAudience", e.target.value)}
+                    placeholder="e.g. All B.Tech Students, AIML / CSE 2nd & 3rd Year"
+                    className={gInputClass(!!errors["targetAudience"])}
+                  />
+                </GFormField>
+
+                {/* Navigation Actions for Section 2 */}
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4 border-t border-border">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCurrentSection(1);
+                      window.scrollTo({ top: 120, behavior: "smooth" });
+                    }}
+                    className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-border bg-background px-6 text-xs font-bold uppercase tracking-widest text-foreground transition-colors hover:bg-secondary cursor-pointer self-start sm:self-auto"
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                    Back
+                  </button>
+
+                  <div className="flex items-center gap-3 ml-auto">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (window.confirm("Are you sure you want to clear this form?")) {
+                          setForm(INITIAL_FORM);
+                          setErrors({});
+                          setVerificationResult(null);
+                          setCurrentSection(1);
+                        }
+                      }}
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      <RotateCcw className="h-3.5 w-3.5" />
+                      Clear form
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={handleNextFromSection2}
+                      className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-primary px-7 text-xs font-bold uppercase tracking-widest text-primary-foreground shadow transition-colors hover:bg-primary-deep cursor-pointer"
+                    >
+                      Next
+                      <ArrowRight className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ================= SECTION 3: PROPOSAL DESCRIPTION & LOGISTICS ================= */}
+          {currentSection === 3 && (
+            <>
+              <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+                <div className="border-b border-border bg-slate-50/80 px-6 py-4">
+                  <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-accent">
+                    <span className="grid h-5 w-5 place-items-center rounded bg-primary text-white text-[0.65rem]">
+                      3
+                    </span>
+                    Section 3 of 3
+                  </div>
+                  <h2 className="mt-1 text-lg font-bold text-primary sm:text-xl">
+                    Proposal Description & Logistics
+                  </h2>
+                  <p className="mt-1 text-xs text-muted-foreground leading-relaxed sm:text-sm">
+                    Provide detailed objectives, schedule breakdown, required hardware/software, and
+                    budget.
+                  </p>
+                </div>
+
+                <div className="p-6 sm:p-8 space-y-6">
+                  {/* Question 16: Event Description */}
+                  <GFormField
+                    number="16"
+                    label="Event Description"
+                    required
+                    error={errors["description"]}
+                    hint="Comprehensive outline of the event topic and scope."
+                  >
+                    <textarea
+                      required
+                      rows={4}
+                      value={form.description}
+                      onChange={(e) => update("description", e.target.value)}
+                      placeholder="Your answer"
+                      className={gInputClass(!!errors["description"])}
+                    />
+                  </GFormField>
+
+                  {/* Question 17: Objectives */}
+                  <GFormField
+                    number="17"
+                    label="Objectives of the Event"
+                    required
+                    error={errors["objectives"]}
+                    hint="What will this event achieve technically or academically?"
+                  >
+                    <textarea
+                      required
+                      rows={3}
+                      value={form.objectives}
+                      onChange={(e) => update("objectives", e.target.value)}
+                      placeholder="1. Build practical competencies in...&#10;2. Introduce participants to industry workflows..."
+                      className={gInputClass(!!errors["objectives"])}
+                    />
+                  </GFormField>
+
+                  {/* Question 18: Proposed Activities / Agenda */}
+                  <GFormField
+                    number="18"
+                    label="Proposed Activities / Agenda"
+                    required
+                    error={errors["agenda"]}
+                    hint="Draft schedule and planned session breakdowns."
+                  >
+                    <textarea
+                      required
+                      rows={3}
+                      value={form.agenda}
+                      onChange={(e) => update("agenda", e.target.value)}
+                      placeholder="Session 1: Keynote & Foundational concepts&#10;Session 2: Hands-on lab sprint..."
+                      className={gInputClass(!!errors["agenda"])}
+                    />
+                  </GFormField>
+
+                  {/* Question 19: Technical Requirements */}
+                  <GFormField
+                    number="19"
+                    label="Technical Requirements"
+                    required
+                    error={errors["technicalRequirements"]}
+                    hint="Computers, software licenses, audio systems, high-speed Wi-Fi, etc."
+                  >
+                    <textarea
+                      required
+                      rows={3}
+                      value={form.technicalRequirements}
+                      onChange={(e) => update("technicalRequirements", e.target.value)}
+                      placeholder="e.g. Lab systems with Python 3.11 installed, projector with HDMI, Wi-Fi access."
+                      className={gInputClass(!!errors["technicalRequirements"])}
+                    />
+                  </GFormField>
+
+                  {/* Question 20: Resources Required */}
+                  <GFormField
+                    number="20"
+                    label="Resources Required"
+                    required
+                    error={errors["resourcesRequired"]}
+                    hint="Guest honorarium, mementos, participant refreshments, certificates."
+                  >
+                    <textarea
+                      required
+                      rows={3}
+                      value={form.resourcesRequired}
+                      onChange={(e) => update("resourcesRequired", e.target.value)}
+                      placeholder="e.g. Speaker memento, E-certificates for attendees, high-tea refreshments."
+                      className={gInputClass(!!errors["resourcesRequired"])}
+                    />
+                  </GFormField>
+
+                  {/* Question 21: Estimated Budget */}
+                  <GFormField
+                    number="21"
+                    label="Estimated Budget"
+                    required
+                    error={errors["estimatedBudget"]}
+                    hint="Projected total cost or state 'Nil' if zero-budget."
+                  >
                     <input
                       type="text"
                       required
-                      inputMode="numeric"
-                      value={form.membershipId}
-                      onChange={(e) => {
-                        update("membershipId", e.target.value);
-                        setVerificationResult(null);
-                      }}
-                      placeholder="e.g. 98765432"
-                      className={gInputClass(!!errors["membershipId"])}
+                      value={form.estimatedBudget}
+                      onChange={(e) => update("estimatedBudget", e.target.value)}
+                      placeholder="e.g. ₹5,000 / Nil (Self-Funded)"
+                      className={gInputClass(!!errors["estimatedBudget"])}
                     />
-                    <button
-                      type="button"
-                      disabled={verifyingMembership || !form.membershipId.trim()}
-                      onClick={performVerificationCheck}
-                      className="inline-flex h-11 shrink-0 items-center justify-center gap-1.5 rounded-md border border-primary/30 bg-primary/5 px-4 text-xs font-bold uppercase tracking-wider text-primary hover:bg-primary hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {verifyingMembership ? (
-                        <>
-                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                          Checking…
-                        </>
-                      ) : (
-                        <>
-                          <BadgeCheck className="h-4 w-4" />
-                          Verify Status
-                        </>
-                      )}
-                    </button>
-                  </div>
+                  </GFormField>
 
-                  {/* Verification status feedback */}
-                  {verificationResult && (
-                    <div
-                      className={`rounded-md p-3 text-xs leading-relaxed flex items-start gap-2 ${
-                        verificationResult.status === "verified"
-                          ? "bg-green-50 border border-green-200 text-green-900"
-                          : verificationResult.status === "pending_roster_check"
-                            ? "bg-amber-50 border border-amber-200 text-amber-900"
-                            : "bg-red-50 border border-red-200 text-red-900"
-                      }`}
-                    >
-                      {verificationResult.status === "verified" ? (
-                        <CheckCircle2 className="h-4 w-4 text-green-600 shrink-0 mt-0.5" />
-                      ) : verificationResult.status === "pending_roster_check" ? (
-                        <Info className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
-                      ) : (
-                        <XCircle className="h-4 w-4 text-red-600 shrink-0 mt-0.5" />
-                      )}
-                      <div>
-                        <strong className="block font-semibold">
-                          {verificationResult.status === "verified"
-                            ? "Membership Roster Verified"
-                            : verificationResult.status === "pending_roster_check"
-                              ? "Verification Workflow: Pending Committee Roster Cross-Check"
-                              : "Membership ID Verification Alert"}
-                        </strong>
-                        <span>{verificationResult.message}</span>
-                      </div>
-                    </div>
-                  )}
+                  {/* Question 22: Expected Outcomes */}
+                  <GFormField
+                    number="22"
+                    label="Expected Outcomes"
+                    required
+                    error={errors["expectedOutcomes"]}
+                    hint="Measurable takeaways, projects completed, membership engagement."
+                  >
+                    <textarea
+                      required
+                      rows={3}
+                      value={form.expectedOutcomes}
+                      onChange={(e) => update("expectedOutcomes", e.target.value)}
+                      placeholder="e.g. 50+ students deploy an AI model; 15 new IEEE memberships generated."
+                      className={gInputClass(!!errors["expectedOutcomes"])}
+                    />
+                  </GFormField>
                 </div>
-              </GFormField>
+              </div>
 
-              {/* Question 3: Registered IEEE Email */}
-              <GFormField
-                number="3"
-                label="Registered IEEE Membership Email Address"
-                required
-                error={errors["membershipEmail"]}
-                hint="The email address tied to your official IEEE account (e.g. you@ieee.org or institutional email)."
-              >
-                <input
-                  type="email"
-                  required
-                  value={form.membershipEmail}
-                  onChange={(e) => update("membershipEmail", e.target.value)}
-                  placeholder="name@ieee.org or you@srmist.edu.in"
-                  autoComplete="email"
-                  className={gInputClass(!!errors["membershipEmail"])}
-                />
-              </GFormField>
-
-              {/* Question 4: IEEE Membership Grade (Radio Group) */}
-              <GFormField
-                number="4"
-                label="IEEE Membership Grade"
-                required
-                error={errors["membershipGrade"]}
-                hint="Select your current grade in the IEEE global membership system."
-              >
-                <div className="mt-2 space-y-2.5">
-                  {MEMBERSHIP_GRADES.map((grade) => (
-                    <label
-                      key={grade}
-                      className="flex items-center gap-3 p-2 rounded-md hover:bg-slate-50 cursor-pointer transition-colors"
-                    >
-                      <input
-                        type="radio"
-                        name="membershipGrade"
-                        value={grade}
-                        checked={form.membershipGrade === grade}
-                        onChange={() => update("membershipGrade", grade)}
-                        className="h-4 w-4 text-primary focus:ring-accent border-gray-300"
-                      />
-                      <span className="text-sm font-medium text-foreground">{grade}</span>
-                    </label>
-                  ))}
-                </div>
-              </GFormField>
-
-              {/* Question 5: IEEE Student Branch Position (Radio Group) */}
-              <GFormField
-                number="5"
-                label="IEEE Student Branch Position"
-                required
-                error={errors["branchPosition"]}
-                hint="Your designated role within the SRMIST Student Branch."
-              >
-                <div className="mt-2 grid gap-2 sm:grid-cols-2">
-                  {BRANCH_POSITIONS.map((pos) => (
-                    <label
-                      key={pos}
-                      className="flex items-center gap-3 p-2 rounded-md hover:bg-slate-50 cursor-pointer transition-colors"
-                    >
-                      <input
-                        type="radio"
-                        name="branchPosition"
-                        value={pos}
-                        checked={form.branchPosition === pos}
-                        onChange={() => update("branchPosition", pos)}
-                        className="h-4 w-4 text-primary focus:ring-accent border-gray-300"
-                      />
-                      <span className="text-sm font-medium text-foreground">{pos}</span>
-                    </label>
-                  ))}
-                </div>
-              </GFormField>
-
-              {/* Question 6: SRM Register Number */}
-              <GFormField
-                number="6"
-                label="SRM Register Number"
-                required
-                error={errors["registerNumber"]}
-                hint="Official university registration number."
-              >
-                <input
-                  type="text"
-                  required
-                  value={form.registerNumber}
-                  onChange={(e) => update("registerNumber", e.target.value)}
-                  placeholder="e.g. RA2211003010xxx"
-                  className={gInputClass(!!errors["registerNumber"])}
-                />
-              </GFormField>
-
-              {/* Question 7: Membership Confirmation Checkbox */}
-              <div className="pt-2">
+              {/* Committee Confirmation & Final Submit Card */}
+              <div className="overflow-hidden rounded-xl border border-border bg-card p-6 shadow-sm space-y-5">
                 <label className="flex items-start gap-3 p-3 rounded-lg border border-border bg-slate-50/60 hover:bg-slate-50 cursor-pointer transition-colors">
                   <input
                     type="checkbox"
                     required
-                    checked={form.membershipConfirmed}
-                    onChange={(e) => update("membershipConfirmed", e.target.checked)}
+                    checked={form.confirmedCoreMember}
+                    onChange={(e) => update("confirmedCoreMember", e.target.checked)}
                     className="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-accent"
                   />
                   <span className="text-sm font-medium text-foreground leading-relaxed">
-                    I confirm that I am a registered IEEE member and that the membership details
-                    provided above are accurate. <span className="text-destructive">*</span>
+                    I confirm that I am submitting this proposal as an IEEE Student Branch Core Committee
+                    member. All proposal details are authentic and ready for formal review.{" "}
+                    <span className="text-destructive">*</span>
                   </span>
                 </label>
-                {errors["membershipConfirmed"] && (
-                  <p className="mt-1 text-xs text-destructive flex items-center gap-1 font-medium">
+
+                {errors["confirmedCoreMember"] && (
+                  <p className="text-xs text-destructive flex items-center gap-1 font-medium">
                     <XCircle className="h-3.5 w-3.5" />
-                    {errors["membershipConfirmed"]}
+                    {errors["confirmedCoreMember"]}
                   </p>
                 )}
-              </div>
-            </div>
-          </div>
 
-          {/* ================= SECTION 2: EVENT INFORMATION ================= */}
-          <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
-            <div className="border-b border-border bg-slate-50/80 px-6 py-4">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-accent">
-                <span className="grid h-5 w-5 place-items-center rounded bg-primary text-white text-[0.65rem]">
-                  2
-                </span>
-                Section 2 of 3
-              </div>
-              <h2 className="mt-1 text-lg font-bold text-primary sm:text-xl">
-                Event Information
-              </h2>
-              <p className="mt-1 text-xs text-muted-foreground leading-relaxed sm:text-sm">
-                Provide the high-level details, target date, mode, and expected attendance.
-              </p>
-            </div>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-3 border-t border-border">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCurrentSection(2);
+                      window.scrollTo({ top: 120, behavior: "smooth" });
+                    }}
+                    className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-border bg-background px-6 text-xs font-bold uppercase tracking-widest text-foreground transition-colors hover:bg-secondary cursor-pointer self-start sm:self-auto"
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                    Back
+                  </button>
 
-            <div className="p-6 sm:p-8 space-y-6">
-              {/* Question 8: Event Title */}
-              <GFormField
-                number="8"
-                label="Event Title"
-                required
-                error={errors["eventTitle"]}
-                hint="Clear, compelling title for the proposed event."
-              >
-                <input
-                  type="text"
-                  required
-                  value={form.eventTitle}
-                  onChange={(e) => update("eventTitle", e.target.value)}
-                  placeholder="Your answer"
-                  className={gInputClass(!!errors["eventTitle"])}
-                />
-              </GFormField>
-
-              {/* Question 9: Event Category */}
-              <GFormField
-                number="9"
-                label="Event Category"
-                required
-                error={errors["category"]}
-                hint="Select the category that best describes the format."
-              >
-                <select
-                  value={form.category}
-                  onChange={(e) => update("category", e.target.value as EventCategory)}
-                  className={gInputClass(!!errors["category"])}
-                >
-                  {CATEGORIES.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
-                    </option>
-                  ))}
-                </select>
-              </GFormField>
-
-              {/* Question 10: Proposed Date */}
-              <GFormField
-                number="10"
-                label="Proposed Date"
-                required
-                error={errors["proposedDate"]}
-                hint="Target date for hosting the event."
-              >
-                <input
-                  type="date"
-                  required
-                  value={form.proposedDate}
-                  onChange={(e) => update("proposedDate", e.target.value)}
-                  className={gInputClass(!!errors["proposedDate"])}
-                />
-              </GFormField>
-
-              {/* Question 11: Timing */}
-              <div className="grid gap-4 sm:grid-cols-2">
-                <GFormField
-                  number="11a"
-                  label="Start Time"
-                  required
-                  error={errors["startTime"]}
-                >
-                  <input
-                    type="time"
-                    required
-                    value={form.startTime}
-                    onChange={(e) => update("startTime", e.target.value)}
-                    className={gInputClass(!!errors["startTime"])}
-                  />
-                </GFormField>
-
-                <GFormField
-                  number="11b"
-                  label="End Time"
-                  required
-                  error={errors["endTime"]}
-                >
-                  <input
-                    type="time"
-                    required
-                    value={form.endTime}
-                    onChange={(e) => update("endTime", e.target.value)}
-                    className={gInputClass(!!errors["endTime"])}
-                  />
-                </GFormField>
-              </div>
-
-              {/* Question 12: Event Venue */}
-              <GFormField
-                number="12"
-                label="Event Venue"
-                required
-                error={errors["venue"]}
-                hint="Physical campus venue or online meeting link."
-              >
-                <input
-                  type="text"
-                  required
-                  value={form.venue}
-                  onChange={(e) => update("venue", e.target.value)}
-                  placeholder="e.g. IST 501 Seminar Hall / Google Meet"
-                  className={gInputClass(!!errors["venue"])}
-                />
-              </GFormField>
-
-              {/* Question 13: Event Mode (Radio Group) */}
-              <GFormField
-                number="13"
-                label="Event Mode"
-                required
-                error={errors["eventMode"]}
-                hint="Delivery modality."
-              >
-                <div className="mt-2 flex flex-wrap gap-4">
-                  {EVENT_MODES.map((mode) => (
-                    <label
-                      key={mode}
-                      className="flex items-center gap-2.5 p-2 rounded-md hover:bg-slate-50 cursor-pointer"
+                  <div className="flex items-center gap-3 ml-auto">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (window.confirm("Are you sure you want to clear this form?")) {
+                          setForm(INITIAL_FORM);
+                          setErrors({});
+                          setVerificationResult(null);
+                          setCurrentSection(1);
+                        }
+                      }}
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      <input
-                        type="radio"
-                        name="eventMode"
-                        value={mode}
-                        checked={form.eventMode === mode}
-                        onChange={() => update("eventMode", mode)}
-                        className="h-4 w-4 text-primary focus:ring-accent border-gray-300"
-                      />
-                      <span className="text-sm font-medium text-foreground">{mode}</span>
-                    </label>
-                  ))}
+                      <RotateCcw className="h-3.5 w-3.5" />
+                      Clear form
+                    </button>
+
+                    <button
+                      type="submit"
+                      disabled={status === "submitting"}
+                      className="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-accent px-8 text-xs font-bold uppercase tracking-widest text-accent-foreground shadow transition-transform hover:-translate-y-0.5 hover:bg-accent/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
+                    >
+                      {status === "submitting" ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          Submitting…
+                        </>
+                      ) : (
+                        <>
+                          <Send className="h-4 w-4" />
+                          Submit Event Proposal
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </div>
-              </GFormField>
-
-              {/* Question 14: Expected Participants */}
-              <GFormField
-                number="14"
-                label="Expected Number of Participants"
-                required
-                error={errors["expectedParticipants"]}
-                hint="Estimated participant attendance."
-              >
-                <input
-                  type="text"
-                  required
-                  value={form.expectedParticipants}
-                  onChange={(e) => update("expectedParticipants", e.target.value)}
-                  placeholder="e.g. 80–120 participants"
-                  className={gInputClass(!!errors["expectedParticipants"])}
-                />
-              </GFormField>
-
-              {/* Question 15: Target Audience */}
-              <GFormField
-                number="15"
-                label="Target Audience"
-                required
-                error={errors["targetAudience"]}
-                hint="Eligible participants and focus batches."
-              >
-                <input
-                  type="text"
-                  required
-                  value={form.targetAudience}
-                  onChange={(e) => update("targetAudience", e.target.value)}
-                  placeholder="e.g. All B.Tech Students, AIML / CSE 2nd & 3rd Year"
-                  className={gInputClass(!!errors["targetAudience"])}
-                />
-              </GFormField>
-            </div>
-          </div>
-
-          {/* ================= SECTION 3: PROPOSAL DESCRIPTION ================= */}
-          <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
-            <div className="border-b border-border bg-slate-50/80 px-6 py-4">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-accent">
-                <span className="grid h-5 w-5 place-items-center rounded bg-primary text-white text-[0.65rem]">
-                  3
-                </span>
-                Section 3 of 3
               </div>
-              <h2 className="mt-1 text-lg font-bold text-primary sm:text-xl">
-                Proposal Description & Logistics
-              </h2>
-              <p className="mt-1 text-xs text-muted-foreground leading-relaxed sm:text-sm">
-                Provide detailed objectives, schedule breakdown, required hardware/software, and
-                budget.
-              </p>
-            </div>
-
-            <div className="p-6 sm:p-8 space-y-6">
-              {/* Question 16: Event Description */}
-              <GFormField
-                number="16"
-                label="Event Description"
-                required
-                error={errors["description"]}
-                hint="Comprehensive outline of the event topic and scope."
-              >
-                <textarea
-                  required
-                  rows={4}
-                  value={form.description}
-                  onChange={(e) => update("description", e.target.value)}
-                  placeholder="Your answer"
-                  className={gInputClass(!!errors["description"])}
-                />
-              </GFormField>
-
-              {/* Question 17: Objectives */}
-              <GFormField
-                number="17"
-                label="Objectives of the Event"
-                required
-                error={errors["objectives"]}
-                hint="What will this event achieve technically or academically?"
-              >
-                <textarea
-                  required
-                  rows={3}
-                  value={form.objectives}
-                  onChange={(e) => update("objectives", e.target.value)}
-                  placeholder="1. Build practical competencies in...&#10;2. Introduce participants to industry workflows..."
-                  className={gInputClass(!!errors["objectives"])}
-                />
-              </GFormField>
-
-              {/* Question 18: Proposed Activities / Agenda */}
-              <GFormField
-                number="18"
-                label="Proposed Activities / Agenda"
-                required
-                error={errors["agenda"]}
-                hint="Draft schedule and planned session breakdowns."
-              >
-                <textarea
-                  required
-                  rows={3}
-                  value={form.agenda}
-                  onChange={(e) => update("agenda", e.target.value)}
-                  placeholder="Session 1: Keynote & Foundational concepts&#10;Session 2: Hands-on lab sprint..."
-                  className={gInputClass(!!errors["agenda"])}
-                />
-              </GFormField>
-
-              {/* Question 19: Technical Requirements */}
-              <GFormField
-                number="19"
-                label="Technical Requirements"
-                required
-                error={errors["technicalRequirements"]}
-                hint="Computers, software licenses, audio systems, high-speed Wi-Fi, etc."
-              >
-                <textarea
-                  required
-                  rows={3}
-                  value={form.technicalRequirements}
-                  onChange={(e) => update("technicalRequirements", e.target.value)}
-                  placeholder="e.g. Lab systems with Python 3.11 installed, projector with HDMI, Wi-Fi access."
-                  className={gInputClass(!!errors["technicalRequirements"])}
-                />
-              </GFormField>
-
-              {/* Question 20: Resources Required */}
-              <GFormField
-                number="20"
-                label="Resources Required"
-                required
-                error={errors["resourcesRequired"]}
-                hint="Guest honorarium, mementos, participant refreshments, certificates."
-              >
-                <textarea
-                  required
-                  rows={3}
-                  value={form.resourcesRequired}
-                  onChange={(e) => update("resourcesRequired", e.target.value)}
-                  placeholder="e.g. Speaker memento, E-certificates for attendees, high-tea refreshments."
-                  className={gInputClass(!!errors["resourcesRequired"])}
-                />
-              </GFormField>
-
-              {/* Question 21: Estimated Budget */}
-              <GFormField
-                number="21"
-                label="Estimated Budget"
-                required
-                error={errors["estimatedBudget"]}
-                hint="Projected total cost or state 'Nil' if zero-budget."
-              >
-                <input
-                  type="text"
-                  required
-                  value={form.estimatedBudget}
-                  onChange={(e) => update("estimatedBudget", e.target.value)}
-                  placeholder="e.g. ₹5,000 / Nil (Self-Funded)"
-                  className={gInputClass(!!errors["estimatedBudget"])}
-                />
-              </GFormField>
-
-              {/* Question 22: Expected Outcomes */}
-              <GFormField
-                number="22"
-                label="Expected Outcomes"
-                required
-                error={errors["expectedOutcomes"]}
-                hint="Measurable takeaways, projects completed, membership engagement."
-              >
-                <textarea
-                  required
-                  rows={3}
-                  value={form.expectedOutcomes}
-                  onChange={(e) => update("expectedOutcomes", e.target.value)}
-                  placeholder="e.g. 50+ students deploy an AI model; 15 new IEEE memberships generated."
-                  className={gInputClass(!!errors["expectedOutcomes"])}
-                />
-              </GFormField>
-            </div>
-          </div>
-
-          {/* ================= SECTION 4: COMMITTEE CONFIRMATION & SUBMIT ================= */}
-          <div className="overflow-hidden rounded-xl border border-border bg-card p-6 shadow-sm space-y-5">
-            <label className="flex items-start gap-3 p-3 rounded-lg border border-border bg-slate-50/60 hover:bg-slate-50 cursor-pointer transition-colors">
-              <input
-                type="checkbox"
-                required
-                checked={form.confirmedCoreMember}
-                onChange={(e) => update("confirmedCoreMember", e.target.checked)}
-                className="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-accent"
-              />
-              <span className="text-sm font-medium text-foreground leading-relaxed">
-                I confirm that I am submitting this proposal as an IEEE Student Branch Core Committee
-                member. All proposal details are authentic and ready for formal review.{" "}
-                <span className="text-destructive">*</span>
-              </span>
-            </label>
-
-            {errors["confirmedCoreMember"] && (
-              <p className="text-xs text-destructive flex items-center gap-1 font-medium">
-                <XCircle className="h-3.5 w-3.5" />
-                {errors["confirmedCoreMember"]}
-              </p>
-            )}
-
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-3 border-t border-border">
-              <button
-                type="button"
-                onClick={() => {
-                  if (window.confirm("Are you sure you want to clear this form?")) {
-                    setForm(INITIAL_FORM);
-                    setErrors({});
-                    setVerificationResult(null);
-                  }
-                }}
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors self-start"
-              >
-                <RotateCcw className="h-3.5 w-3.5" />
-                Clear form
-              </button>
-
-              <button
-                type="submit"
-                disabled={status === "submitting"}
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-accent px-8 text-xs font-bold uppercase tracking-widest text-accent-foreground shadow transition-transform hover:-translate-y-0.5 hover:bg-accent/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                {status === "submitting" ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    Submitting…
-                  </>
-                ) : (
-                  <>
-                    <Send className="h-4 w-4" />
-                    Submit Event Proposal
-                  </>
-                )}
-              </button>
-            </div>
-          </div>
+            </>
+          )}
         </form>
       </div>
     </div>

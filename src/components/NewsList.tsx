@@ -23,6 +23,7 @@ import {
 import { NEWS, type NewsItem } from "@/data/site";
 
 // Poster & Event Images
+import inaugurationPoster from "@/assets/inauguration-poster.jpg";
 import innovateX from "@/assets/innovate-x.png";
 import tensor26Poster from "@/assets/tensor26-new.jpg";
 import webforgePoster from "@/assets/webforge-inauguration.png";
@@ -36,6 +37,7 @@ import bugFix from "@/assets/ieee-bug-fix.png";
 import news3 from "@/assets/news-3.jpg";
 
 const POSTER_BY_ID: Record<string, string> = {
+  inauguration: inaugurationPoster,
   "innovate-x": innovateX,
   tensor26: tensor26Poster,
   webforge: webforgePoster,

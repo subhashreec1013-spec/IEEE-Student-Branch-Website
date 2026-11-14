@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import inaugurationPoster from "@/assets/inauguration-poster.jpg";
+import whatComesNextPoster from "@/assets/what-comes-next-poster.jpg";
 import epicsWheelchair from "@/assets/epics-wheelchair.png";
 import tensor26New from "@/assets/tensor26-new.jpg";
 import activities2 from "@/assets/activities-2.jpg";
@@ -13,7 +13,7 @@ import membershipQr from "@/assets/ieee-membership-qr.jpg";
 import { FEATURED } from "@/data/site";
 
 const CATEGORY_IMAGES: Record<string, string> = {
-  Events: inaugurationPoster,
+  Events: whatComesNextPoster,
   Activities: tensor26New,
   "IEEE EPICS": epicsWheelchair,
   Learning: epicsWheelchair,
@@ -50,7 +50,7 @@ export function FeaturedCards() {
         const image = isActivities
           ? ACTIVITY_IMAGES[activityIndex]
           : (CATEGORY_IMAGES[card.category] ??
-            [inaugurationPoster, tensor26New, epicsWheelchair, ieeeMembershipPoster][i % 4]);
+            [whatComesNextPoster, tensor26New, epicsWheelchair, ieeeMembershipPoster][i % 4]);
 
         return (
           <article

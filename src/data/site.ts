@@ -264,13 +264,6 @@ export const FUNCTIONAL_LEADS: TeamMember[] = [
     email: "internal.ieee@srmist.edu.in",
     linkedin: "https://www.linkedin.com/",
   },
-  {
-    name: "Dr. Lakshmi Narayanan",
-    position: "Branch Counsellor",
-    department: "Faculty, Dept. of ECE",
-    email: "counsellor.ieee@srmist.edu.in",
-    linkedin: "https://www.linkedin.com/",
-  },
 ];
 
 export const TEAM: TeamMember[] = [
@@ -340,6 +333,29 @@ export type NewsItem = {
 };
 
 export const NEWS: NewsItem[] = [
+  {
+    id: "inauguration",
+    title: "Inauguration Ceremony of the IEEE Student Branch",
+    date: "14 November 2026",
+    category: "Inauguration",
+    tagline: "Join us as we embark on a journey of innovation, collaboration, and excellence in technology.",
+    description:
+      "SRM Institute of Science and Technology, Faculty of Engineering and Technology, cordially invites you to the Inauguration Ceremony of the IEEE Student Branch at 501, Seminar Hall.",
+    details: {
+      venue: "501, Seminar Hall — SRM Institute of Science and Technology, Tiruchirappalli",
+      time: "10:30 AM IST",
+      organizers: "Faculty of Engineering and Technology, SRM IST",
+      highlights: [
+        "Inaugurated by: Dr. M. Venkateshkumar (Associate Editor IEEE Access Journal, Chairman IEEE PES Madras Section)",
+        "Presided over by: Dr. R. Shivakumar (Chairman, SRM Group of Institutions Ramapuram and Tiruchirappalli)",
+        "Chief Guest: Prof.(Dr.) Md. Sameeruddin Khan (Pro Vice Chancellor, SRM IST)",
+        "Chief Guest: Prof. Dr. G. Vairavel (Director of Academics & Educational Initiatives, SRM Group of Institutions)",
+        "Chief Guest: Dr. R. Balasundaram (Dean of FET, SRM IST Tiruchirappalli)",
+        "Join us as we embark on a journey of innovation, collaboration, and excellence in technology.",
+      ],
+      pdfUrl: "/posters/upcoming-event-poster.pdf",
+    },
+  },
   {
     id: "innovate-x",
     title: "INNOVATE X — Build. Showcase. Inspire.",
@@ -511,14 +527,6 @@ export const NEWS: NewsItem[] = [
     },
   },
   {
-    id: "award",
-    title: "Branch Recognised as Outstanding Student Branch by Madras Section",
-    date: "30 June 2026",
-    category: "Award",
-    description:
-      "The recognition acknowledges sustained membership growth, technical activity volume and community outreach across the year.",
-  },
-  {
     title: "IEEE Student Branch Successfully Conducts Technical Workshop",
     date: "22 August 2026",
     category: "Workshop",
@@ -538,20 +546,6 @@ export const NEWS: NewsItem[] = [
     category: "Competition",
     description:
       "Teams of up to four can register for the Innovation Challenge, with prototypes shortlisted for the Madras Section showcase.",
-  },
-  {
-    title: "Signal Processing Society Chapter Inaugurated",
-    date: "12 June 2026",
-    category: "Chapter",
-    description:
-      "A new SPS chapter joins the branch, opening dedicated sessions on DSP, audio engineering and computer vision.",
-  },
-  {
-    title: "Student Paper Accepted at Regional IEEE Conference",
-    date: "02 June 2026",
-    category: "Research",
-    description:
-      "A third-year student team had its paper on low-power sensor networks accepted for oral presentation.",
   },
 ];
 
