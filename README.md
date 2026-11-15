@@ -1,4 +1,4 @@
-# Welcome to your Lovable project
+
 
 This project was built with [IEEE sb]((https://ieeetsrm.in)).
 
