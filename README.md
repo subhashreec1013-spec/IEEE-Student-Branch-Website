@@ -1,9 +1,6 @@
 # IEEE Student Branch Website
 ### SRM Institute of Science and Technology, Tiruchirappalli
 
-<p align="center">
-  <strong>Building the Next Generation of Innovators</strong>
-</p>
 
 <p align="center">
   <a href="https://www.ieeetsrm.in/">Live Website</a> |
