@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { SITE } from "@/data/site";
 import { IeeeLogo } from "./IeeeLogo";
+import { SrmLogo } from "./SrmLogo";
 import { SocialLinks } from "./SocialLinks";
 
 const QUICK_LINKS = [
@@ -47,12 +48,16 @@ export function Footer() {
       <div className="relative mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
           <div>
-            <div className="flex items-center gap-3">
-              <IeeeLogo
-                variant="white"
-                className="h-9 sm:h-10 w-auto shrink-0 drop-shadow-xs"
-                alt="IEEE Student Branch Logo"
-              />
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center gap-2.5">
+                <IeeeLogo
+                  variant="white"
+                  className="h-9 sm:h-10 w-auto shrink-0 drop-shadow-xs"
+                  alt="IEEE Student Branch Logo"
+                />
+                <span className="h-6 w-px bg-primary-foreground/30" aria-hidden="true" />
+                <SrmLogo variant="card" className="h-6 sm:h-7 w-auto" />
+              </div>
               <span className="text-lg font-bold text-primary-foreground">{SITE.name}</span>
             </div>
             <p className="mt-4 text-sm leading-relaxed text-primary-foreground/85">

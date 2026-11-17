@@ -3,6 +3,7 @@ import { Menu, Search, X } from "lucide-react";
 import { useState } from "react";
 import { NAV, SITE } from "@/data/site";
 import { IeeeLogo } from "./IeeeLogo";
+import { SrmLogo } from "./SrmLogo";
 import ieeeLogoFull from "../assets/ieee-logo-full.png";
 
 export function Header() {
@@ -14,16 +15,20 @@ export function Header() {
       {/* ================= HEADER TOP ================= */}
       <div className="border-b border-border bg-background">
         <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-3 sm:px-6 lg:px-8">
-          {/* LEFT: IEEE LOGO + SITE NAME */}
+          {/* LEFT: IEEE LOGO + SRM LOGO + SITE NAME */}
           <Link
             to="/"
-            className="flex min-w-0 items-center gap-3.5 sm:gap-4"
+            className="flex min-w-0 items-center gap-2.5 sm:gap-3.5 md:gap-4"
             aria-label={`${SITE.name} home`}
           >
-            <IeeeLogo className="h-11 sm:h-13 md:h-14 w-auto shrink-0 drop-shadow-xs" />
+            <div className="flex shrink-0 items-center gap-2 sm:gap-2.5">
+              <IeeeLogo className="h-9 sm:h-12 md:h-13 w-auto shrink-0 drop-shadow-xs" />
+              <span className="h-6 sm:h-7 w-px bg-border" aria-hidden="true" />
+              <SrmLogo className="h-7 sm:h-10 md:h-11 w-auto shrink-0" />
+            </div>
 
             <span className="min-w-0">
-              <span className="block truncate text-lg font-bold leading-tight text-primary sm:text-xl lg:text-2xl">
+              <span className="block truncate text-base font-bold leading-tight text-primary sm:text-xl lg:text-2xl">
                 {SITE.name}
               </span>
 
@@ -47,15 +52,17 @@ export function Header() {
             </button>
 
             {/* DIVIDER */}
-            <span className="hidden h-7 w-px bg-border sm:block" aria-hidden="true" />
+            <span className="hidden h-7 w-px bg-border md:block" aria-hidden="true" />
 
-            {/* IEEE BRANDING */}
-            <span className="hidden items-center gap-2 sm:flex">
+            {/* IEEE & SRM BRANDING */}
+            <span className="hidden items-center gap-2.5 md:flex">
               <img
                 src={ieeeLogoFull}
                 alt="IEEE Student Branch Logo"
-                className="h-10 sm:h-12 w-auto shrink-0 drop-shadow-xs object-contain"
+                className="h-9 sm:h-11 w-auto shrink-0 drop-shadow-xs object-contain"
               />
+              <span className="h-6 w-px bg-border" aria-hidden="true" />
+              <SrmLogo className="h-8 sm:h-9 w-auto shrink-0" />
             </span>
 
             {/* MOBILE MENU BUTTON */}
@@ -151,26 +158,33 @@ export function Header() {
 
           {/* MOBILE MENU ITEMS */}
           {open && (
-            <ul
+            <div
               id="mobile-nav"
               className="border-t border-primary-foreground/20 bg-primary-deep pb-2"
             >
-              {NAV.map((item) => (
-                <li key={item.to}>
-                  <Link
-                    to={item.to}
-                    onClick={() => setOpen(false)}
-                    activeOptions={{ exact: item.to === "/" }}
-                    activeProps={{
-                      className: "border-l-4 border-accent bg-primary",
-                    }}
-                    className="block px-6 py-3 text-sm font-semibold uppercase tracking-wide text-primary-foreground transition-colors hover:bg-primary focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-background"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+              <div className="flex items-center justify-center gap-3 border-b border-primary-foreground/15 bg-primary/40 px-6 py-3">
+                <IeeeLogo variant="white" className="h-8 w-auto shrink-0 drop-shadow-xs" />
+                <span className="h-5 w-px bg-primary-foreground/30" aria-hidden="true" />
+                <SrmLogo variant="card" className="h-6 w-auto" />
+              </div>
+              <ul>
+                {NAV.map((item) => (
+                  <li key={item.to}>
+                    <Link
+                      to={item.to}
+                      onClick={() => setOpen(false)}
+                      activeOptions={{ exact: item.to === "/" }}
+                      activeProps={{
+                        className: "border-l-4 border-accent bg-primary",
+                      }}
+                      className="block px-6 py-3 text-sm font-semibold uppercase tracking-wide text-primary-foreground transition-colors hover:bg-primary focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-background"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
         </div>
       </nav>
