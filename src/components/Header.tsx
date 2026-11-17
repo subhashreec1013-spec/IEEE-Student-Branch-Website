@@ -4,7 +4,6 @@ import { useState } from "react";
 import { NAV, SITE } from "@/data/site";
 import { IeeeLogo } from "./IeeeLogo";
 import { SrmLogo } from "./SrmLogo";
-import ieeeLogoFull from "../assets/ieee-logo-full.png";
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -22,9 +21,9 @@ export function Header() {
             aria-label={`${SITE.name} home`}
           >
             <div className="flex shrink-0 items-center gap-2 sm:gap-2.5">
-              <IeeeLogo className="h-9 sm:h-12 md:h-13 w-auto shrink-0 drop-shadow-xs" />
+              <IeeeLogo className="h-10 sm:h-11 w-auto shrink-0 drop-shadow-xs" />
               <span className="h-6 sm:h-7 w-px bg-border" aria-hidden="true" />
-              <SrmLogo className="h-7 sm:h-10 md:h-11 w-auto shrink-0" />
+              <SrmLogo className="h-10 sm:h-11 w-auto shrink-0" />
             </div>
 
             <span className="min-w-0">
@@ -50,20 +49,6 @@ export function Header() {
             >
               <Search className="h-5 w-5" aria-hidden="true" />
             </button>
-
-            {/* DIVIDER */}
-            <span className="hidden h-7 w-px bg-border md:block" aria-hidden="true" />
-
-            {/* IEEE & SRM BRANDING */}
-            <span className="hidden items-center gap-2.5 md:flex">
-              <img
-                src={ieeeLogoFull}
-                alt="IEEE Student Branch Logo"
-                className="h-9 sm:h-11 w-auto shrink-0 drop-shadow-xs object-contain"
-              />
-              <span className="h-6 w-px bg-border" aria-hidden="true" />
-              <SrmLogo className="h-8 sm:h-9 w-auto shrink-0" />
-            </span>
 
             {/* MOBILE MENU BUTTON */}
             <button
