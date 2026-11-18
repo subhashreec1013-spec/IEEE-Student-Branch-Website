@@ -25,12 +25,18 @@ export const Route = createFileRoute("/about")({
 });
 
 const CHAPTERS = [
-  { name: "IEEE Computer Society", focus: "Software engineering, AI and systems" },
-  { name: "IEEE Power & Energy Society", focus: "Smart grids and renewable energy" },
-  { name: "IEEE Women in Engineering", focus: "Mentoring and leadership programmes" },
-  { name: "IEEE Signal Processing Society", focus: "DSP, imaging and computer vision" },
-  { name: "IEEE Robotics & Automation", focus: "Autonomous systems and control" },
-  { name: "IEEE Communications Society", focus: "Wireless networks and 5G research" },
+  {
+    name: "CIS - Computational Intelligence Society",
+    focus: "Neural networks, deep learning, fuzzy systems and evolutionary computing.",
+  },
+  {
+    name: "EDS - Electron Devices Society",
+    focus: "Semiconductor physics, micro- and nano-electronics, devices and materials.",
+  },
+  {
+    name: "EMBS - Engineering in Medicine and Biology Society",
+    focus: "Biomedical engineering, healthcare tech, bioinformatics and medical devices.",
+  },
 ];
 
 function About() {
@@ -59,7 +65,7 @@ function About() {
               {[
                 { value: "600+", label: "Active members" },
                 { value: "45+", label: "Events per year" },
-                { value: "6", label: "Technical chapters" },
+                { value: "3", label: "Technical chapters" },
               ].map((stat) => (
                 <div key={stat.label} className="rounded-md border border-border bg-surface p-5">
                   <p className="text-2xl font-bold text-primary">{stat.value}</p>
@@ -71,9 +77,9 @@ function About() {
           <div className="overflow-hidden rounded-lg border border-border bg-slate-100/80 dark:bg-slate-900/40 shadow-[var(--shadow-card)] flex items-center justify-center max-h-[380px] lg:max-h-[420px]">
             <img
               src={aboutImg}
-              alt="Student volunteers assembling an electronics project"
-              width={755}
-              height={616}
+              alt="IEEE Student Branch members and activities"
+              width={1600}
+              height={900}
               loading="lazy"
               className="h-full w-full max-h-[380px] lg:max-h-[420px] object-contain transition-transform duration-500 hover:scale-[1.02]"
             />

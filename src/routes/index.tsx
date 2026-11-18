@@ -62,9 +62,9 @@ function Home() {
           <div className="overflow-hidden rounded-lg border border-border bg-slate-100/80 dark:bg-slate-900/40 shadow-[var(--shadow-card)] flex items-center justify-center max-h-[380px] lg:max-h-[420px]">
             <img
               src={aboutImg}
-              alt="Students testing a circuit prototype in a university makerspace"
-              width={755}
-              height={616}
+              alt="IEEE Student Branch members and activities"
+              width={1600}
+              height={900}
               loading="lazy"
               className="h-full w-full max-h-[380px] lg:max-h-[420px] object-contain transition-transform duration-500 hover:scale-[1.02]"
             />

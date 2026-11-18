@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { Linkedin, Mail, Users, ArrowUpRight, UserPlus } from "lucide-react";
+import { Linkedin, Mail, Users, ArrowUpRight, UserPlus, Copy, Check, ExternalLink } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   EXECUTIVE_MEMBERS,
   FUNCTIONAL_LEADS,
@@ -108,7 +116,29 @@ export function TeamMemberCard({
   isSubcard?: boolean;
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
   const imageSrc = MEMBER_IMAGES[member.name];
+
+  const handleCopyEmail = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText(member.email);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleOpenGmail = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    window.open(
+      `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(member.email)}`,
+      "_blank",
+      "noopener,noreferrer"
+    );
+  };
+
+  const handleOpenDefaultMail = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    window.location.href = `mailto:${member.email}`;
+  };
 
   const isWebmaster =
     member.name.startsWith("Archana") || member.position.toLowerCase() === "webmaster";
@@ -209,14 +239,66 @@ export function TeamMemberCard({
             >
               <Linkedin className="h-4 w-4" aria-hidden="true" />
             </a>
-            <a
-              href={`mailto:${member.email}`}
-              aria-label={`Email ${member.name}`}
-              onClick={(e) => e.stopPropagation()}
-              className="grid h-9 w-9 place-items-center rounded-full border border-border text-primary transition-colors hover:bg-primary hover:text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-            >
-              <Mail className="h-4 w-4" aria-hidden="true" />
-            </a>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  type="button"
+                  aria-label={`Contact ${member.name} via Email`}
+                  onClick={(e) => e.stopPropagation()}
+                  className="grid h-9 w-9 place-items-center rounded-full border border-border text-primary transition-colors hover:bg-primary hover:text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring cursor-pointer"
+                >
+                  <Mail className="h-4 w-4" aria-hidden="true" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="center"
+                side="bottom"
+                className="z-[60] w-64 p-2 text-left shadow-lg"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <DropdownMenuLabel className="p-1 font-normal">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                    Email Address
+                  </p>
+                  <p className="text-xs font-semibold text-foreground select-all break-all mt-0.5">
+                    {member.email}
+                  </p>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={handleOpenGmail}
+                  className="flex items-center gap-2 text-xs py-2 cursor-pointer font-medium"
+                >
+                  <ExternalLink className="h-3.5 w-3.5 text-accent" />
+                  <span>Open in Gmail (Web)</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={handleOpenDefaultMail}
+                  className="flex items-center gap-2 text-xs py-2 cursor-pointer font-medium"
+                >
+                  <Mail className="h-3.5 w-3.5 text-primary" />
+                  <span>Open in Default Mail App</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={handleCopyEmail}
+                  className="flex items-center gap-2 text-xs py-2 cursor-pointer font-medium"
+                >
+                  {copied ? (
+                    <>
+                      <Check className="h-3.5 w-3.5 text-green-600 dark:text-green-400" />
+                      <span className="text-green-600 dark:text-green-400 font-semibold">
+                        Copied to Clipboard!
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="h-3.5 w-3.5 text-muted-foreground" />
+                      <span>Copy Email Address</span>
+                    </>
+                  )}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </article>

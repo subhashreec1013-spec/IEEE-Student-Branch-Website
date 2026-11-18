@@ -179,28 +179,28 @@ export const EXECUTIVE_MEMBERS: TeamMember[] = [
     name: "Kishanbala Pandiyan",
     position: "Chairperson",
     department: "Computer Science & Engineering with a specialization in Artificial Intelligence and Machine Learning",
-    email: "chair.ieee@srmist.edu.in",
+    email: "kishanbalap20@gmail.com",
     linkedin: "https://www.linkedin.com/in/kishanbala-pandiyan-889195326/",
   },
   {
     name: "Krittikka Mayilsamy",
     position: "Vice Chairperson",
     department: "Computer Science & Engineering with a specialization in Artificial Intelligence and Machine Learning",
-    email: "vicechair.ieee@srmist.edu.in",
+    email: "krittikka1980@gmail.com",
     linkedin: "https://www.linkedin.com/in/krittikka-mayilsamy-2250b4323",
   },
   {
     name: "Yezhilvanan",
     position: "Secretary",
-    department: "Electronics & Communication Engineering",
-    email: "secretary.ieee@srmist.edu.in",
+    department: "Electrical and Electronics Engineering",
+    email: "yezhilvanan@gmail.com",
     linkedin: "https://www.linkedin.com/in/yezhilh13",
   },
   {
     name: "Krishwin",
     position: "Joint Secretary",
     department: "Computer Science & Engineering with a specialization in Artificial Intelligence and Machine Learning",
-    email: "jointsec.ieee@srmist.edu.in",
+    email: "krishwin26@gmail.com",
     linkedin:
       "https://www.linkedin.com/in/krishwin-ds-10a158290?utm_source=share_via&utm_content=profile&utm_medium=member_android",
   },
@@ -208,7 +208,7 @@ export const EXECUTIVE_MEMBERS: TeamMember[] = [
     name: "Karthik",
     position: "Treasurer",
     department: "Computer Science & Engineering with a specialization in Artificial Intelligence and Machine Learning",
-    email: "treasurer.ieee@srmist.edu.in",
+    email: "karthickrajmohan404@gmail.com",
     linkedin:
       "https://www.linkedin.com/in/karthik-r-612939353?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
   },
@@ -216,7 +216,7 @@ export const EXECUTIVE_MEMBERS: TeamMember[] = [
     name: "Archana Sivakumar",
     position: "Webmaster",
     department: "Computer Science & Engineering with a specialization in Artificial Intelligence and Machine Learning",
-    email: "web.ieee@srmist.edu.in",
+    email: "archana90875@gmail.com",
     linkedin: "https://www.linkedin.com/in/archana-s-765179444/",
   },
 ];
@@ -233,7 +233,7 @@ export const FUNCTIONAL_LEADS: TeamMember[] = [
     name: "Gowtham A",
     position: "Event Organiser",
     department: "Computer Science & Engineering with a specialization in Artificial Intelligence and Machine Learning",
-    email: "events.ieee@srmist.edu.in",
+    email: "gowthamanbalagan085@gmail.com",
     linkedin: "https://www.linkedin.com/",
   },
   {
@@ -247,21 +247,21 @@ export const FUNCTIONAL_LEADS: TeamMember[] = [
     name: "Lakshana Arulaprakasam",
     position: "Social Media Incharge",
     department: "Computer Science & Engineering with a specialization in Artificial Intelligence and Machine Learning",
-    email: "external.ieee@srmist.edu.in",
+    email: "lakshana123arul@gmail.com",
     linkedin: "https://www.linkedin.com/",
   },
   {
     name: "Smita A",
     position: "Membership and External Relation Coordinator",
     department: "Computer Science & Engineering with a specialization in Artificial Intelligence and Machine Learning",
-    email: "social.ieee@srmist.edu.in",
+    email: "smithamali2007@gmail.com",
     linkedin: "https://www.linkedin.com/",
   },
   {
     name: "Ramsaran M",
     position: "Operations Lead",
-    department: "Mechanical Engineering",
-    email: "internal.ieee@srmist.edu.in",
+    department: "Computer Science & Engineering with a specialization in Artificial Intelligence and Machine Learning",
+    email: "ramsaran70707@gmail.com",
     linkedin: "https://www.linkedin.com/",
   },
 ];
@@ -276,7 +276,7 @@ export const WEB_TEAM: TeamMember[] = [
     name: "Bharathik RS",
     position: "Core Member",
     department: "Computer Science & Engineering with a specialization in Artificial Intelligence and Machine Learning",
-    email: "web.ieee@srmist.edu.in",
+    email: "rsbharatika@gmail.com",
     linkedin: "https://www.linkedin.com/",
   },
   {
@@ -610,37 +610,40 @@ export const ACTIVITIES: Activity[] = [
 
 export const RESOURCES = [
   {
-    title: "CSS Libraries",
+    title: "Training & Branch Management",
     description:
-      "Resources and styling tools used to maintain a consistent visual experience across every branch page.",
+      "Center for Leadership Excellence (CLE) training modules, Student Branch Officer Training sessions, and vTools for managing events, officer reporting, and local activity monitoring.",
+    icon: "GraduationCap",
   },
   {
-    title: "JavaScript Libraries",
+    title: "Funding Opportunities",
     description:
-      "Interactive components and functionality used across the website, from the slider to the contact form.",
+      "Grants and financial support mechanisms to help student branches execute local projects, technical meetings, humanitarian initiatives, and outreach programmes.",
+    icon: "DollarSign",
   },
   {
-    title: "Customization",
+    title: "SAC Programs",
     description:
-      "Information about customizing the IEEE Student Branch website content, sections and branding.",
+      "SAC Awards, Virtual Speakers Bureau, IEEEXtreme programming competition, Keyboard Typing Marathon, IEEE Five Minutes micro-learning videos, and IEEE Potentials Magazine.",
+    icon: "Trophy",
   },
   {
-    title: "Header",
+    title: "Technical Resources",
     description:
-      "Information about the website header, branch identity and the primary navigation bar.",
+      "IEEE Collabratec professional networking platform, free web hosting for IEEE organizational units, and official email alias service for branch communications.",
+    icon: "Code2",
   },
   {
-    title: "Menus",
-    description: "Primary navigation and footer navigation, including the accessible mobile menu.",
-  },
-  {
-    title: "Footer",
-    description: "Important links, social media channels and official IEEE policy information.",
-  },
-  {
-    title: "Custom Functions",
+    title: "Membership Tools",
     description:
-      "Additional website functionality and integrations maintained by the webmaster team.",
+      "Membership development materials, OU Analytics dashboard, IEEE Rosters management, Membership Validator tool, and group payment options to support member drives.",
+    icon: "Users",
+  },
+  {
+    title: "Communication Resources",
+    description:
+      "Official IEEE social media channels, IEEE eNotice and LISTSERV mailing tools, and the IEEE Visual Identity Toolkit with brand standards, logos, and design templates.",
+    icon: "Megaphone",
   },
 ];
 
